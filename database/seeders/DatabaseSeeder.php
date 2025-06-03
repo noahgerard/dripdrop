@@ -2,9 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\User;
+use App\Models\Coffee;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +18,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create departments
+        Department::create(['name' => 'IT']);
+        Department::create(['name' => 'HR']);
+        Department::create(['name' => 'Marketing']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Create users
+        User::create([
+            'name' => 'Apple Man',
+            'email' => 'testing@gmail.com',
+            'password' => bcrypt('password'),
+            'department_id' => 1
+        ]);
+        User::create([
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'password' => bcrypt('password'),
+            'department_id' => 2
+        ]);
+        User::create([
+            'name' => 'John Smith',
+            'email' => 'john@example.com',
+            'password' => bcrypt('password'),
+            'department_id' => 3
         ]);
     }
 }
