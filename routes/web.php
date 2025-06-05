@@ -9,15 +9,17 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function (Request $request) {
-    $userstats = $request->user()->getCoffeeStats();
+    $user_stats = $request->user()->stats();
+    $dep_stats = $request->user()->department->stats();
 
-    return view('dashboard', ['userstats' => $userstats]);
+    return view('dashboard', ['user_stats' => $user_stats, 'dep_stats' => $dep_stats]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/leaderboard', function (Request $request) {
     $user_leaderboard = $request->user()->leaderboard();
+    $dep_leaderboard = $request->user()->department->leaderboard();
 
-    return view('leaderboard', ['user_leaderboard' => $user_leaderboard]);
+    return view('leaderboard', ['user_leaderboard' => $user_leaderboard, 'dep_leaderboard' => $dep_leaderboard]);
 })->middleware(['auth', 'verified'])->name('leaderboard');
 
 Route::middleware('auth')->group(function () {

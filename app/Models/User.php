@@ -57,7 +57,7 @@ class User extends Authenticatable
         return $this->hasMany(Coffee::class);
     }
 
-    public function getCoffeeStats()
+    public function stats()
     {
         $now = now();
         $today = $now->copy()->startOfDay();
@@ -94,7 +94,7 @@ class User extends Authenticatable
 
     public static function leaderboard()
     {
-        $users = User::orderBy('coffees_count', 'desc')->withCount('coffees')->paginate(10);
+        $users = User::with('department')->orderBy('coffees_count', 'desc')->withCount('coffees')->paginate(10);
         return $users;
     }
 }
