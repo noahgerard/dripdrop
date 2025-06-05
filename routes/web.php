@@ -2,17 +2,22 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    $userstats = $request->user()->getCoffeeStats();
+
+    return view('dashboard', ['userstats' => $userstats]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/leaderboard', function () {
-    return view('leaderboard');
+Route::get('/leaderboard', function (Request $request) {
+    $user_leaderboard = $request->user()->leaderboard();
+
+    return view('leaderboard', ['user_leaderboard' => $user_leaderboard]);
 })->middleware(['auth', 'verified'])->name('leaderboard');
 
 Route::middleware('auth')->group(function () {
@@ -22,3 +27,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/coffee.php';

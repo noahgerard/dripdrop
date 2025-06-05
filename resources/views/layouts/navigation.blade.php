@@ -22,6 +22,17 @@
                 </div>
             </div>
 
+            <!-- Drink Coffee button -->
+            @auth
+                <form method="POST" action="{{ route('coffee.create') }}">
+                    @csrf
+                    <button type="submit"
+                        class="bg-red-400 p-2 h-fit my-auto text-white font-bold hover:cursor-pointer transition-transform hover:scale-y-95 hover:scale-x-105">
+                        I drinked coffee
+                    </button>
+                </form>
+            @endauth
+
             <!-- Settings Dropdown -->
             @auth
                 <div class="hidden sm:flex sm:items-center sm:ms-6">

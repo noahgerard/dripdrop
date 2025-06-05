@@ -56,4 +56,45 @@ class User extends Authenticatable
     {
         return $this->hasMany(Coffee::class);
     }
+
+    public function getCoffeeStats()
+    {
+        $now = now();
+        $today = $now->copy()->startOfDay();
+        $weekStart = $now->copy()->startOfWeek();
+        $monthStart = $now->copy()->startOfMonth();
+
+        $totalCoffees = $this->coffees()->count();
+
+        $last_n_coffees = $this->coffees()->orderBy('consumed_at', 'desc')->paginate(10);
+
+        // Calculate rank: how many users have more coffees than this user?
+        $rank = self::whereRaw(
+            '(select count(*) from coffees where coffees.user_id = users.id) > ?',
+            [$totalCoffees]
+        )
+            ->where('id', '!=', $this->id)
+            ->count() + 1;
+
+        return [
+            'today' => $this->coffees()->where('consumed_at', '>=', $today)->count(),
+            'this_week' => $this->coffees()->where('consumed_at', '>=', $weekStart)->count(),
+            'this_month' => $this->coffees()->where('consumed_at', '>=', $monthStart)->count(),
+            'personal_best' => $this->coffees()
+                ->selectRaw('DATE(consumed_at) as day, COUNT(*) as count')
+                ->groupBy('day')
+                ->orderByDesc('count')
+                ->value('count') ?? 0,
+            'last_coffee_time' => optional($this->coffees()->latest('consumed_at')->first())->consumed_at,
+            'last_n_coffees' => $last_n_coffees,
+            'total' => $totalCoffees,
+            'rank' => $rank,
+        ];
+    }
+
+    public static function leaderboard()
+    {
+        $users = User::orderBy('coffees_count', 'desc')->withCount('coffees')->paginate(10);
+        return $users;
+    }
 }
