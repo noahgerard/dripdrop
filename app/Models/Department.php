@@ -27,15 +27,26 @@ class Department extends Model
         $month = $now->copy()->startOfMonth();
 
         $users = $this->users();
+        $totalCoffees = $this->coffees()->count();
         $cups_today = $this->coffees()->where('consumed_at', '>=', $today)->count();
         $cups_month = $this->coffees()->where('consumed_at', '>=', $month)->count();
+
+        $rank = self::whereRaw(
+            '(select count(*) from coffees
+            inner join users on users.id = coffees.user_id
+            where users.department_id = departments.id
+        ) > ?',
+            [$totalCoffees]
+        )
+            ->where('id', '!=', $this->id)
+            ->count() + 1;
 
         return [
             'today' => $cups_today,
             'cpp' => number_format($cups_today / $users->count(), 2),
             'this_month' => $cups_month,
             'members' => $users->count(),
-            'rank' => 1
+            'rank' => $rank
         ];
     }
 
