@@ -43,7 +43,11 @@ class Department extends Model
     {
         return self::withCount(['coffees', 'users'])
             ->orderByDesc('coffees_count')
-            ->where('users_count', '>', 0)
+            ->whereExists(function ($query) {
+                $query->selectRaw(1)
+                    ->from('users')
+                    ->whereColumn('users.department_id', 'departments.id');
+            })
             ->paginate(10);
     }
 }

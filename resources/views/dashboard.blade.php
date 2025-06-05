@@ -18,7 +18,7 @@
                 <x-metric-card value="{{ $user_stats['rank'] }}" label="Rank" />
             </div>
 
-            <h2 class="text-2xl font-bold mt-8">Your Department Stats (IT)</h2>
+            <h2 class="text-2xl font-bold mt-8">Your Department Stats ({{ Auth::user()->department->name }})</h2>
             <div class="flex flex-wrap gap-6 justify-center">
                 <x-metric-card value="{{ $dep_stats['today'] }}" label="Cups today" />
                 <x-metric-card value="{{ $dep_stats['cpp'] }}" label="Today's CPP (Cups per person)" />

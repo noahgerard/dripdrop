@@ -20,7 +20,6 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-
         $departments = Department::pluck('name', 'id')->toArray();
 
         return view('auth.register', ['departments' => $departments]);
