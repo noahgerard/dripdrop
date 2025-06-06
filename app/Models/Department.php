@@ -66,6 +66,6 @@ class Department extends Model
                     ->from('users')
                     ->whereColumn('users.department_id', 'departments.id');
             })
-            ->paginate(10);
+            ->paginate(10, ['*'], 'dep_lb');
     }
 }

@@ -105,7 +105,7 @@ class User extends Authenticatable
                 }
             ])
             ->orderByDesc('coffees_count')
-            ->paginate(10);
+            ->paginate(10, ['*'], 'user_lb');
 
         return $users;
     }

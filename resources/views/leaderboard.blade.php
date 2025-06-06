@@ -25,7 +25,7 @@
                 @endforelse
             </div>
             <div class="mt-4">
-                {{ $user_leaderboard->links() }}
+                {{ $user_leaderboard->appends(['dep_lb' => $dep_leaderboard->currentPage()])->links() }}
             </div>
 
             <div class="flex flex-row justify-between items-end mt-8">
@@ -45,7 +45,7 @@
                 @endforelse
             </div>
             <div class="mt-4">
-                {{ $dep_leaderboard->links() }}
+                {{ $dep_leaderboard->appends(['user_lb' => $user_leaderboard->currentPage()])->links() }}
             </div>
         </div>
     </div>
