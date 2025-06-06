@@ -41,6 +41,10 @@ class CoffeeController extends Controller
             'id' => 'required|string'
         ]);
 
+        if (!$data['id']) {
+            return Redirect::route('dashboard')->with('status', 'no-id');
+        }
+
         $coffee = Coffee::where([
             'id' => $data['id'],
             'user_id' => $request->user()->id,
