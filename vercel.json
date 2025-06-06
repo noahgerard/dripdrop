@@ -1,12 +1,19 @@
 {
     "version": 2,
     "framework": null,
+    "outputDirectory": "public",
     "functions": {
-        "api/*.php": {
-            "runtime": "vercel-php@0.7.3"
-        }
+        "api/index.php": { "runtime": "vercel-php@0.7.3" }
     },
     "routes": [
+        {
+            "src": "/dripdrop.svg",
+            "dest": "/dripdrop.svg"
+        },
+        {
+            "src": "/build/(.*)",
+            "dest": "/build/$1"
+        },
         {
             "src": "/(.*)",
             "dest": "/api/index.php"
@@ -14,7 +21,7 @@
     ],
     "env": {
         "APP_ENV": "production",
-        "APP_DEBUG": "true",
+        "APP_DEBUG": "false",
         "APP_URL": "https://dripdrop-zeta.vercel.app/",
 
         "APP_CONFIG_CACHE": "/tmp/config.php",

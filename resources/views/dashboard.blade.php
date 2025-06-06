@@ -15,6 +15,8 @@
                 <x-metric-card
                     value="{{ $user_stats['last_coffee_time'] ? Carbon::createFromDate($user_stats['last_coffee_time'])->diffForHumans() : 'Never' }}"
                     label="Last coffee time" />
+                <x-metric-card value="{{ $user_stats['total'] }}" label="All-Time" />
+
                 <x-metric-card value="{{ $user_stats['rank'] }}" label="Rank" />
             </div>
 

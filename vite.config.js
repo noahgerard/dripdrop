@@ -10,4 +10,6 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    // Change this line:
+    base: '/' // Or an empty string ''
 });
