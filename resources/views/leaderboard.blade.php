@@ -2,7 +2,7 @@
     <div class="py-12 mt-[5%]">
         <div class="flex flex-col gap-4 max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex flex-row justify-between items-end mt-8">
-                <h2 class="text-2xl font-bold">User Leaderboard ({{ $user_leaderboard->count() }})</h2>
+                <h2 class="text-2xl font-bold">User Leaderboard ({{ $user_leaderboard->total() }})</h2>
                 <h2 class="text-md text-gray-400">This week</h2>
             </div>
             <div class="flex flex-col gap-2 bg-white rounded-2xl shadow-lg p-2 sm:p-4">
@@ -29,7 +29,7 @@
             </div>
 
             <div class="flex flex-row justify-between items-end mt-8">
-                <h2 class="text-2xl font-bold">Department Leaderboard ({{ $dep_leaderboard->count() }})</h2>
+                <h2 class="text-2xl font-bold">Department Leaderboard ({{ $dep_leaderboard->total() }})</h2>
                 <h2 class="text-md text-gray-400">This week</h2>
             </div>
             <div class="flex flex-col gap-2 bg-white rounded-2xl shadow-lg p-2 sm:p-4">

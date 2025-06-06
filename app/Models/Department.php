@@ -52,7 +52,14 @@ class Department extends Model
 
     public static function leaderboard()
     {
-        return self::withCount(['coffees', 'users'])
+        $weekAgo = now()->subWeek();
+
+        return self::withCount([
+            'coffees as coffees_count' => function ($query) use ($weekAgo) {
+                $query->where('consumed_at', '>=', $weekAgo);
+            },
+            'users'
+        ])
             ->orderByDesc('coffees_count')
             ->whereExists(function ($query) {
                 $query->selectRaw(1)
