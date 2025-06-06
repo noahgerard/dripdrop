@@ -28,8 +28,10 @@
                 <x-metric-card value="{{ $dep_stats['members'] }}" label="Members" />
                 <x-metric-card value="{{ $dep_stats['rank'] }}" label="Department rank" />
             </div>
-
-            <h2 id="timeline" class="text-2xl font-bold mt-8">Personal Timeline</h2>
+            <div class="flex justify-between items-end mt-8">
+                <h2 id="timeline" class="text-2xl font-bold">Personal Timeline</h2>
+                <h4 id="timeline" class="text-md text-gray-400">Hover over entry to delete</h4>
+            </div>
             <div class="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-2 sm:p-4">
                 @forelse ($user_stats['last_n_coffees'] as $coffee)
                     <form method="POST" action="{{ route(name: 'coffee.delete') }}" class="flex gap-2 h-fit group">
@@ -37,7 +39,7 @@
                         @method('delete')
                         <input type="hidden" name="id" value="{{ $coffee->id }}" />
                         <div
-                            class="flex w-full items-center gap-4 p-3 rounded-lg bg-gray-50 shadow-sm hover:bg-yellow-50 transition">
+                            class="flex w-full items-center gap-4 p-3 rounded-lg bg-gray-50 shadow-sm hover:bg-yellow-50 transition-all -mr-2 group-hover:mr-2">
                             <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
                             <span class="font-semibold text-gray-800 local-coffee-date"
                                 data-iso="{{ $coffee->consumed_at }}"></span>
@@ -45,8 +47,8 @@
                                 data-iso="{{ $coffee->consumed_at }}"></span>
                         </div>
                         <button type="submit"
-                            class="relative transition-all w-0 opacity-0 group-hover:w-6 group-hover:opacity-100 text-slate-400 hover:text-red-400">
-                            <x-lucide-trash class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 my-auto w-6 " />
+                            class="relative flex items-center justify-center w-6 opacity-100 md:w-0 md:opacity-0 md:group-hover:w-6 md:group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400">
+                            <x-lucide-trash class="w-6" />
                         </button>
                     </form>
 
