@@ -1,5 +1,5 @@
 <x-app-layout>
-    <main class="h-full py-20 flex flex-col">
+    <main class="h-full py-20 flex flex-col justify-center">
         <div class="flex-1 flex justify-center">
             <div>
                 <h1 class="font-bold text-5xl">Drip<span class="text-blue-700">Drop</span></h1>
@@ -7,7 +7,9 @@
             </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row md:min-h-[15rem] mt-[10rem] transition-all">
+        <a href="/register" class="w-fit mx-auto mt-[5rem]"><button class="p-2 px-4 bg-slate-200 hover:shadow-lg shadow-sm rounded-md">Sign Up Now</button></a>
+
+        <div class="flex flex-col sm:flex-row md:min-h-[15rem] mt-[5rem] transition-all">
             <x-slogan-card icon_name="lucide-bean" word="Bean." title="It starts with the source."
                 description="Every cup begins with a choice — the bean you select reflects your taste, your energy, your identity. Discover what fuels you. Who are you becoming through your daily habits?"
                 :image="asset('images/bean.png')" />
