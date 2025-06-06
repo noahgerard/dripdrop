@@ -11,6 +11,10 @@
             "dest": "/dripdrop.svg"
         },
         {
+            "src": "/images/(.*)",
+            "dest": "/images/$1"
+        },
+        {
             "src": "/build/(.*)",
             "dest": "/build/$1"
         },
