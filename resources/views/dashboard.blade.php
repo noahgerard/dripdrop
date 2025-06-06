@@ -9,21 +9,21 @@
             <h2 class="text-2xl font-bold">Your Stats</h2>
             <div class="flex flex-wrap gap-6">
                 <x-metric-card value="{{ $user_stats['today'] }}" label="Cups of coffee today" />
-                <x-metric-card value="{{ $user_stats['this_week'] }}" label="Total this week" />
-                <x-metric-card value="{{ $user_stats['this_month'] }}" label="Total this month" />
+                <x-metric-card value="{{ $user_stats['this_week'] }}" label="Cups this week" />
+                <x-metric-card value="{{ $user_stats['this_month'] }}" label="Cups this month" />
                 <x-metric-card value="{{ $user_stats['personal_best'] }}" label="Personal best (day)" />
                 <x-metric-card
                     value="{{ $user_stats['last_coffee_time'] ? Carbon::createFromDate($user_stats['last_coffee_time'])->diffForHumans() : 'Never' }}"
                     label="Last coffee time" />
                 <x-metric-card value="{{ $user_stats['total'] }}" label="All-Time" />
-
+                <x-metric-card value="{{ $user_stats['avg_cups_per_day'] }}" label="Avg. Cups/Day" />
                 <x-metric-card value="{{ $user_stats['rank'] }}" label="Rank" />
             </div>
 
             <h2 class="text-2xl font-bold mt-8">Your Department Stats ({{ Auth::user()->department->name }})</h2>
             <div class="flex flex-wrap gap-6 justify-center">
                 <x-metric-card value="{{ $dep_stats['today'] }}" label="Cups today" />
-                <x-metric-card value="{{ $dep_stats['cpp'] }}" label="Today's CPP (Cups per person)" />
+                <x-metric-card value="{{ $dep_stats['cpp'] }}" label="Today's Cups/Member" />
                 <x-metric-card value="{{ $dep_stats['this_month'] }}" label="Cups this month" />
                 <x-metric-card value="{{ $dep_stats['members'] }}" label="Members" />
                 <x-metric-card value="{{ $dep_stats['rank'] }}" label="Department rank" />

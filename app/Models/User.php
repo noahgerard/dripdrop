@@ -60,6 +60,7 @@ class User extends Authenticatable
     public function stats()
     {
         $now = now();
+        $days_since_creation = $now->diffInDays($now);
         $today = $now->copy()->startOfDay();
         $weekStart = $now->copy()->startOfWeek();
         $monthStart = $now->copy()->startOfMonth();
@@ -87,6 +88,7 @@ class User extends Authenticatable
                 ->value('count') ?? 0,
             'last_coffee_time' => optional($this->coffees()->latest('consumed_at')->first())->consumed_at,
             'last_n_coffees' => $last_n_coffees,
+            'avg_cups_per_day' => number_format($totalCoffees / max($days_since_creation, 1), 2),
             'total' => $totalCoffees,
             'rank' => $rank,
         ];
