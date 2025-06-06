@@ -24,10 +24,10 @@
 
             <!-- Drink Coffee button -->
             @auth
-                <form method="POST" action="{{ route('coffee.create') }}">
+                <form method="POST" class="flex items-center" action="{{ route('coffee.create') }}" id="coffee-form">
                     @csrf
-                    <button type="submit"
-                        class="bg-red-400 p-2 h-fit my-auto text-white font-bold hover:cursor-pointer transition-transform hover:scale-y-95 hover:scale-x-105">
+                    <button type="submit" id="coffee-btn"
+                        class="bg-red-400 p-2 h-fit text-white font-bold hover:cursor-pointer transition-transform hover:scale-y-95 hover:scale-x-105">
                         I drinked coffee
                     </button>
                 </form>
@@ -140,4 +140,25 @@
             </div>
         @endauth
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const coffeeBtn = document.getElementById('coffee-btn');
+            if (coffeeBtn) {
+                coffeeBtn.addEventListener('click', function(e) {
+                    // Confetti explosion
+                    confetti({
+                        particleCount: 300,
+                        spread: 120,
+                        origin: {
+                            y: 0.6
+                        },
+                        zIndex: 9999
+                    });
+                }, {
+                    once: true
+                }); // Only once per click/submit
+            }
+        });
+    </script>
 </nav>
