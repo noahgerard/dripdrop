@@ -96,12 +96,12 @@ class User extends Authenticatable
 
     public static function leaderboard()
     {
-        $weekAgo = now()->subWeek();
+        $startOfWeek = now()->copy()->startOfWeek();
 
         $users = User::with('department')
             ->withCount([
-                'coffees as coffees_count' => function ($query) use ($weekAgo) {
-                    $query->where('consumed_at', '>=', $weekAgo);
+                'coffees as coffees_count' => function ($query) use ($startOfWeek) {
+                    $query->where('consumed_at', '>=', $startOfWeek);
                 }
             ])
             ->orderByDesc('coffees_count')

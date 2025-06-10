@@ -52,11 +52,11 @@ class Department extends Model
 
     public static function leaderboard()
     {
-        $weekAgo = now()->subWeek();
+        $startOfWeek = now()->copy()->startOfWeek();
 
         return self::withCount([
-            'coffees as coffees_count' => function ($query) use ($weekAgo) {
-                $query->where('consumed_at', '>=', $weekAgo);
+            'coffees as coffees_count' => function ($query) use ($startOfWeek) {
+                $query->where('consumed_at', '>=', $startOfWeek);
             },
             'users'
         ])
