@@ -60,7 +60,7 @@ class User extends Authenticatable
     public function stats()
     {
         $now = now();
-        $days_since_creation = $now->diffInDays($now);
+        $days_since_creation = $this->created_at->diffInDays($now);
         $today = $now->copy()->startOfDay();
         $weekStart = $now->copy()->startOfWeek();
         $monthStart = $now->copy()->startOfMonth();
