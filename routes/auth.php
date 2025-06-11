@@ -59,8 +59,14 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
+
+
 Route::middleware('guest')->group(function () {
     Route::get('redirect/{provider}', [SSOController::class, 'redirect'])->name('sso.redirect');
-
-    Route::get('callback/{provider}', [SSOController::class, 'callback'])->name('sso.callback');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('redirect/{provider}/{reauth?}', [SSOController::class, 'redirect'])->name('sso.redirect');
+});
+
+Route::get('callback/{provider}', [SSOController::class, 'callback'])->name('sso.callback');

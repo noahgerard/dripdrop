@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Session;
+
 
 class ProfileController extends Controller
 {
@@ -46,9 +48,16 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        if ($request->user()->isSSO()) {
+
+            if (!Session::pull('sso_reauthenticated')) {
+                return Redirect::route('sso.redirect', ['reauth' => true, 'provider' => 'github']);
+            }
+        } else {
+            $request->validateWithBag('userDeletion', [
+                'password' => ['required', 'current_password'],
+            ]);
+        }
 
         $user = $request->user();
 

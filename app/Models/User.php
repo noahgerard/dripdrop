@@ -49,6 +49,10 @@ class User extends Authenticatable
         ];
     }
 
+    public function isSSO(): bool {
+        return is_null($this->password);
+    }
+
     public function department()
     {
         return $this->belongsTo(Department::class);

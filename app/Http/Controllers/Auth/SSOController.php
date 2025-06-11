@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use \Illuminate\Support\Str;
 use Laravel\Socialite\Contracts\User as ContractsUser;
 use Laravel\Socialite\Facades\Socialite;
@@ -15,9 +16,14 @@ class SSOController extends Controller
     /**
      * Redirect to appropriate oauth provider
      */
-    public function redirect(string $provider): RedirectResponse
+    public function redirect(string $provider, string $reauth = '0'): RedirectResponse
     {
-        return Socialite::driver($provider)->redirect();
+        if ($reauth == "1") {
+            Session::put("sso_reauth_provider", $provider);
+            return Socialite::driver($provider)->with(['prompt' => 'login'])->redirect();
+        } else {
+            return Socialite::driver($provider)->redirect();
+        }
     }
 
     /**
@@ -33,9 +39,16 @@ class SSOController extends Controller
             $dbUser = $this->createUserFromSocialProvider($provider, $socialUser);
         }
 
-        Auth::login($dbUser);
-
-        return redirect()->intfended('/dashboard');
+        // If reauth callback
+        $reauth_provider = Session::pull('sso_reauth_provider');
+        if ($reauth_provider) {
+            Auth::login($dbUser);
+            Session::put('sso_reauthenticated', true);
+            return redirect()->route('profile.edit')->with('status', 'reauthenticated');
+        } else {
+            Auth::login($dbUser);
+            return redirect()->intended('/dashboard');
+        }
     }
 
     /**
@@ -46,11 +59,11 @@ class SSOController extends Controller
      */
     protected function createUserFromSocialProvider(string $provider, ContractsUser $socialUser): User
     {
+        // Create user with no password
         return User::create([
             'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'Unknown',
             'email' => $socialUser->getEmail(),
             'department_id' => 0,
-            'password' => bcrypt(Str::random(64)),
             'avatar' => $socialUser->getAvatar(),
             "{$provider}_id" => $socialUser->getId(),
         ]);
