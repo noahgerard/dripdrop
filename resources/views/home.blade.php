@@ -7,7 +7,8 @@
             </div>
         </div>
 
-        <a href="/register" class="w-fit mx-auto mt-[5rem]"><button class="p-2 px-4 bg-slate-200 hover:shadow-lg shadow-sm rounded-md">Sign Up Now</button></a>
+        <a href="/register" class="w-fit mx-auto mt-[5rem]"><x-rainbow-button>Get Started</x-rainbow-button>
+        </a>
 
         <div class="flex flex-col sm:flex-row md:min-h-[15rem] mt-[5rem] transition-all">
             <x-slogan-card icon_name="lucide-bean" word="Bean." title="It starts with the source."
