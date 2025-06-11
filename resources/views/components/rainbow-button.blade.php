@@ -1,48 +1,18 @@
-@props([
-    'is' => 'button',
-    'class' => '',
-    'speed' => 2,
-])
+{{-- From: https://uiverse.io/S4tyendra/dangerous-bear-48 --}}
 
-@php
-    $speedInSeconds = $speed . 's';
-@endphp
-
-<{{ $is }}
-    {{ $attributes->merge([
-        'class' =>
-            "rainbow-button group relative inline-flex h-11 cursor-pointer items-center justify-center rounded-xl border-0
-            bg-[length:200%] px-8 py-2 font-medium text-primary-foreground transition-colors
-            [background-clip:padding-box,border-box,border-box] [background-origin:border-box]
-            [border:calc(0.08*1rem)_solid_transparent] focus-visible:outline-none focus-visible:ring-1
-            focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50
-            before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5
-            before:-translate-x-1/2 before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]
-            before:bg-[length:200%] before:[filter:blur(calc(0.8*1rem))]
-            bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]
-            dark:bg-[linear-gradient(#fff,#fff),linear-gradient(#fff_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] " .
-            $class,
-    ]) }}
-    style="--color-1: hsl(0 100% 63%); --color-2: hsl(270 100% 63%); --color-3: hsl(210 100% 63%); --color-4: hsl(195 100% 63%); --color-5: hsl(90 100% 63%); --speed: {{ $speedInSeconds }}; animation: rainbow var(--speed) infinite linear;">
-    {{ $slot }}
-    </{{ $is }}>
-
-    @once
-        @push('styles')
-            <style>
-                .rainbow-button:before {
-                    animation: rainbow var(--speed) infinite linear;
-                }
-
-                @keyframes rainbow {
-                    0% {
-                        background-position: 0;
-                    }
-
-                    100% {
-                        background-position: 200%;
-                    }
-                }
-            </style>
-        @endpush
-    @endonce
+<button
+    class="relative inline-block p-px font-semibold leading-6 text-white bg-neutral-900 shadow-2xl cursor-pointer rounded-2xl shadow-emerald-900 transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 hover:shadow-emerald-600">
+    <span
+        class="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-600 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"></span>
+    <span class="relative z-10 block px-6 py-3 rounded-2xl bg-neutral-950">
+        <div class="relative z-10 flex items-center space-x-3">
+            <span
+                class="transition-all duration-500 group-hover:translate-x-1.5 group-hover:text-emerald-300">{{ $slot }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                class="w-7 h-7 transition-all duration-500 group-hover:translate-x-1.5 group-hover:text-emerald-300">
+                <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z">
+                </path>
+            </svg>
+        </div>
+    </span>
+</button>
