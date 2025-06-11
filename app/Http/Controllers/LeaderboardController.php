@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Coffee;
-use Carbon\Carbon;
+use App\Models\Department;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-
 
 class LeaderboardController extends Controller
 {
@@ -18,8 +17,14 @@ class LeaderboardController extends Controller
      */
     public function view(Request $request): View
     {
-        $user_leaderboard = $request->user()->leaderboard();
-        $dep_leaderboard = $request->user()->department->leaderboard();
+        // Time to Live (minutes)
+        $ttl = 60 * 5;
+
+        $userPage = $request->input('user_lb', 1);
+        $depPage = $request->input('dep_lb', 1);
+
+        $user_leaderboard = User::leaderboardCached($userPage, $ttl);
+        $dep_leaderboard = Department::leaderboardCached($depPage, $ttl);
 
         return view('leaderboard', ['user_leaderboard' => $user_leaderboard, 'dep_leaderboard' => $dep_leaderboard]);
     }

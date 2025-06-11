@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -49,7 +50,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function isSSO(): bool {
+    public function isSSO(): bool
+    {
         return is_null($this->password);
     }
 
@@ -114,5 +116,12 @@ class User extends Authenticatable
             ->paginate(10, ['*'], 'user_lb');
 
         return $users;
+    }
+
+    public static function leaderboardCached($page = 1, $ttl = 300)
+    {
+        return Cache::remember("user_lb_page_{$page}", $ttl, function () use ($page) {
+            return self::leaderboard();
+        });
     }
 }

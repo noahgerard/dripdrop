@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Department extends Model
 {
@@ -67,5 +68,12 @@ class Department extends Model
                     ->whereColumn('users.department_id', 'departments.id');
             })
             ->paginate(10, ['*'], 'dep_lb');
+    }
+
+    public static function leaderboardCached($page = 1, $ttl = 300)
+    {
+        return Cache::remember("dep_lb_page_{$page}", $ttl, function () use ($page) {
+            return self::leaderboard();
+        });
     }
 }
