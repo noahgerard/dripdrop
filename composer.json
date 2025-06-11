@@ -11,7 +11,9 @@
     "require": {
         "php": "^8.2",
         "blade-ui-kit/blade-icons": "^1.8",
+        "doctrine/dbal": "^4.2",
         "laravel/framework": "^12.0",
+        "laravel/socialite": "^5.21",
         "laravel/tinker": "^2.10.1",
         "mallardduck/blade-lucide-icons": "^1.23"
     },

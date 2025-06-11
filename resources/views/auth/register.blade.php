@@ -56,4 +56,6 @@
             </x-primary-button>
         </div>
     </form>
+
+    <x-sso-links />
 </x-guest-layout>
