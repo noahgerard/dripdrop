@@ -49,7 +49,6 @@ class ProfileController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         if ($request->user()->isSSO()) {
-
             if (!Session::pull('sso_reauthenticated')) {
                 return Redirect::route('sso.redirect', ['reauth' => true, 'provider' => 'github']);
             }
