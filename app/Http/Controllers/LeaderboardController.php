@@ -23,8 +23,8 @@ class LeaderboardController extends Controller
         $userPage = $request->input('user_lb', 1);
         $depPage = $request->input('dep_lb', 1);
 
-        $user_leaderboard = User::leaderboardCached($userPage, $ttl);
-        $dep_leaderboard = Department::leaderboardCached($depPage, $ttl);
+        $user_leaderboard = User::leaderboard();
+        $dep_leaderboard = Department::leaderboard();
 
         return view('leaderboard', ['user_leaderboard' => $user_leaderboard, 'dep_leaderboard' => $dep_leaderboard]);
     }

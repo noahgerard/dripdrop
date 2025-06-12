@@ -112,16 +112,8 @@ class User extends Authenticatable
                     $query->where('consumed_at', '>=', $startOfWeek);
                 }
             ])
-            ->orderByDesc('coffees_count')
-            ->paginate(10, ['*'], 'user_lb');
+            ->orderByDesc('coffees_count');
 
-        return $users;
-    }
-
-    public static function leaderboardCached($page = 1, $ttl = 300)
-    {
-        return Cache::remember("user_lb_page_{$page}", $ttl, function () use ($page) {
-            return self::leaderboard();
-        });
+        return $users->paginate(10, ['*'], 'user_lb');
     }
 }

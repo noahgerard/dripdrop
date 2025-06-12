@@ -55,7 +55,7 @@ class Department extends Model
     {
         $startOfWeek = now()->copy()->startOfWeek();
 
-        return self::withCount([
+        $data = self::withCount([
             'coffees as coffees_count' => function ($query) use ($startOfWeek) {
                 $query->where('consumed_at', '>=', $startOfWeek);
             },
@@ -66,14 +66,8 @@ class Department extends Model
                 $query->selectRaw(1)
                     ->from('users')
                     ->whereColumn('users.department_id', 'departments.id');
-            })
-            ->paginate(10, ['*'], 'dep_lb');
-    }
+            });
 
-    public static function leaderboardCached($page = 1, $ttl = 300)
-    {
-        return Cache::remember("dep_lb_page_{$page}", $ttl, function () use ($page) {
-            return self::leaderboard();
-        });
+        return $data->paginate(10, ['*'], 'dep_lb');
     }
 }
