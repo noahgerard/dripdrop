@@ -134,8 +134,10 @@ return [
             'americano' => 'Americano',
             'coldbrew' => 'Cold Brew',
             'mocha' => 'Mocha',
-            'tea' => 'Tea...',
-
+            'monster' => 'Monster',
+            'neurogum' => 'Neurogum',
+            'tea' => 'Tea',
+            'matcha' => 'Matcha',
             'other' => 'Other',
         ],
     ],
