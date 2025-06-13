@@ -63,7 +63,7 @@ class CoffeeController extends Controller
                 ]);
 
                 if ($response->successful() && isset($response['data']['url'], $response['data']['delete_url'])) {
-                    $data['img_url'] = $response['data']['thumb']['url'];
+                    $data['img_url'] = $response['data']['medium']['url'];
                     $data['del_img_url'] = $response['data']['delete_url'];
                 } else {
                     Log::error('Image upload failed', [
