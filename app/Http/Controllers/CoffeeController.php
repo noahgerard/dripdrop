@@ -61,11 +61,9 @@ class CoffeeController extends Controller
             ]);
 
             if ($response->successful() && isset($response['data']['url'], $response['data']['delete_url'])) {
-                Log::info('' . $response['data']['url']);
-                $data['img_url'] = $response['data']['medium']['url'];
+                $data['img_url'] = $response['data']['thumb']['url'];
                 $data['del_img_url'] = $response['data']['delete_url'];
             } else {
-                dd($response);
                 return back()->withErrors(['coffee_image' => 'Image upload failed.']);
             }
         } else {
@@ -99,7 +97,7 @@ class CoffeeController extends Controller
             if ($coffee->is_custom && !empty($coffee->del_img_url)) {
                 // Delete image from imgbb first
                 try {
-                    Http::get($coffee->del_img_url);
+                    Http::delete($coffee->del_img_url);
                 } catch (\Exception $e) {
                     Log::warning('Failed to delete imgbb image', [
                         'user_id' => $request->user()->id,
@@ -115,7 +113,8 @@ class CoffeeController extends Controller
             // Log coffee deletion
             Log::info('Coffee deleted', [
                 'user_id' => $request->user()->id,
-                'coffee_id' => $data['id'],
+                'img' => $coffee->img_url,
+                'del' => $coffee->del_img_url,
                 'timestamp' => now(),
             ]);
 

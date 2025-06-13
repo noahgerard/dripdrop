@@ -89,7 +89,7 @@
                                 </div>
                                 @if (!empty($coffee->img_url))
                                     <div
-                                        class="flex-shrink-0 w-32 h-32 rounded-md overflow-hidden border border-yellow-200 bg-white flex items-center justify-center">
+                                        class="flex-shrink-0 w-[20rem] h-[20rem] rounded-md overflow-hidden border border-yellow-200 bg-white flex items-center justify-center">
                                         <img src="{{ $coffee->img_url }}" alt="Coffee image"
                                             class="object-contain w-full h-full" />
                                     </div>
