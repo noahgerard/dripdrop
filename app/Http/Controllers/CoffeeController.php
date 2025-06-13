@@ -40,7 +40,7 @@ class CoffeeController extends Controller
                 'title' => 'required|string|max:255',
                 'desc' => 'required|string|max:1000',
                 'coffee_type' => 'required|string|in:' . implode(',', array_keys($types)),
-                'coffee_image' => 'required|image|max:4096',
+                'coffee_image' => 'nullable|image|max:4096', // changed to nullable
             ]);
 
             $data['is_custom'] = true;
@@ -48,29 +48,31 @@ class CoffeeController extends Controller
             $data['desc'] = $validated['desc'];
             $data['type'] = $validated['coffee_type'];
 
-            $image = $request->file('coffee_image');
+            if ($request->hasFile('coffee_image')) {
+                $image = $request->file('coffee_image');
 
-            $apiKey = env('IMGBB_API_KEY');
-            $uploadPath = $image->getRealPath();
-            $uploadName = $image->getClientOriginalName();
-            $response = Http::attach(
-                'image',
-                fopen($uploadPath, 'r'),
-                $uploadName
-            )->post('https://api.imgbb.com/1/upload', [
-                'key' => $apiKey,
-            ]);
-
-            if ($response->successful() && isset($response['data']['url'], $response['data']['delete_url'])) {
-                $data['img_url'] = $response['data']['thumb']['url'];
-                $data['del_img_url'] = $response['data']['delete_url'];
-            } else {
-                Log::error('Image upload failed', [
-                    'user_id' => $request->user()->id,
-                    'response' => $response->json(),
-                    'status' => $response->status(),
+                $apiKey = env('IMGBB_API_KEY');
+                $uploadPath = $image->getRealPath();
+                $uploadName = $image->getClientOriginalName();
+                $response = Http::attach(
+                    'image',
+                    fopen($uploadPath, 'r'),
+                    $uploadName
+                )->post('https://api.imgbb.com/1/upload', [
+                    'key' => $apiKey,
                 ]);
-                return back()->withErrors(['coffee_image' => 'Image upload failed.']);
+
+                if ($response->successful() && isset($response['data']['url'], $response['data']['delete_url'])) {
+                    $data['img_url'] = $response['data']['thumb']['url'];
+                    $data['del_img_url'] = $response['data']['delete_url'];
+                } else {
+                    Log::error('Image upload failed', [
+                        'user_id' => $request->user()->id,
+                        'response' => $response->json(),
+                        'status' => $response->status(),
+                    ]);
+                    return back()->withErrors(['coffee_image' => 'Image upload failed.']);
+                }
             }
         } else {
             Log::info('YEEEEE');

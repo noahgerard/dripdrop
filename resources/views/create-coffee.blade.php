@@ -40,7 +40,7 @@
                     <input class="hidden" name="custom" value="yes">
 
                     <label for="title">Title</label>
-                    <input id="title" name="title" placeholder="E.g. Monday Morning Brew" maxlength=20
+                    <input id="title" name="title" placeholder="E.g. Monday Morning Brew" maxlength=100
                         class="p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200"
                         required></input>
 
@@ -57,7 +57,7 @@
                         <x-lucide-image class="w-5 h-5" />
                         <span>Add Photo</span>
                     </label>
-                    <input type="file" id="coffee_image" name="coffee_image" accept="image/*" required
+                    <input type="file" id="coffee_image" name="coffee_image" accept="image/*"
                         class="p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white transition file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         x-ref="coffee_image" @change="handleFileChange">
                     <template x-if="previewUrl">
