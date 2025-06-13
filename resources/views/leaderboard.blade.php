@@ -11,8 +11,10 @@
                         class="flex items-center gap-4 p-3 rounded-lg bg-gray-50 shadow-sm hover:bg-yellow-50 transition">
                         <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
 
-                        <span class="font-semibold text-gray-800">{{ $user->name }}
-                            [{{ $user->department->name }}]</span>
+                        <a href="{{ route('user.dashboard', ['id' => $user->id]) }}"
+                            class="font-semibold text-gray-800 hover:underline">
+                            {{ $user->name }} [{{ $user->department->name }}]
+                        </a>
 
                         @if ($user->id == Auth::user()->id)
                             <span

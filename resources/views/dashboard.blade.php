@@ -5,7 +5,13 @@
 <x-app-layout>
     <div class="py-12 mt-[5%]">
         <div class="flex flex-col gap-4 max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 class="text-2xl font-bold">Your Stats</h2>
+            <h2 class="text-2xl font-bold">
+                @if (isset($viewing_user))
+                    {{ $viewing_user->name }}'s Stats
+                @else
+                    Your Stats
+                @endif
+            </h2>
             <div class="flex flex-wrap gap-6">
                 <x-metric-card value="{{ $user_stats['today'] }}" label="Cups of coffee today" />
                 <x-metric-card value="{{ $user_stats['this_week'] }}" label="Cups this week" />
@@ -18,7 +24,13 @@
                 <x-metric-card value="{{ $user_stats['avg_cups_per_day'] }}" label="Avg. Cups/Day" />
                 <x-metric-card value="{{ $user_stats['rank'] }}" label="Rank" />
             </div>
-            <h2 class="text-2xl font-bold mt-8">Your Department Stats ({{ Auth::user()->department->name }})</h2>
+            <h2 class="text-2xl font-bold mt-8">
+                @if (isset($viewing_user))
+                    {{ $viewing_user->department->name ?? 'Department' }}'s Stats
+                @else
+                    Your Department Stats ({{ Auth::user()->department->name }})
+                @endif
+            </h2>
 
             <div class="flex flex-wrap gap-6 justify-center">
                 <x-metric-card value="{{ $dep_stats['today'] }}" label="Cups today" />
@@ -35,7 +47,13 @@
 
 
             <div class="flex justify-between items-end mt-8">
-                <h2 id="timeline" class="text-2xl font-bold">Your Coffees</h2>
+                <h2 id="timeline" class="text-2xl font-bold">
+                    @if (isset($viewing_user))
+                        {{ $viewing_user->name }}'s Coffees
+                    @else
+                        Your Coffees
+                    @endif
+                </h2>
             </div>
             <div class="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-2 sm:p-4">
                 @forelse ($user_stats['last_n_coffees'] as $coffee)
@@ -52,10 +70,12 @@
                                     data-iso="{{ $coffee->consumed_at }}"></span>
                                 <span class="text-gray-500 text-sm ml-auto local-coffee-time"
                                     data-iso="{{ $coffee->consumed_at }}"></span>
-                                <button type="submit"
-                                    class="relative flex items-center justify-center w-6 opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400 ml-2">
-                                    <x-lucide-trash class="w-6" />
-                                </button>
+                                @if (!isset($viewing_user) || (isset($viewing_user) && $viewing_user->id === Auth::id()))
+                                    <button type="submit"
+                                        class="relative flex items-center justify-center w-6 opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400 ml-2">
+                                        <x-lucide-trash class="w-6" />
+                                    </button>
+                                @endif
                             </div>
                         </form>
                     @else
@@ -72,10 +92,12 @@
                                         data-iso="{{ $coffee->consumed_at }}"></span>
                                     <span class="text-gray-500 text-sm ml-auto local-coffee-time"
                                         data-iso="{{ $coffee->consumed_at }}"></span>
-                                    <button type="submit"
-                                        class="relative flex items-center justify-center w-6 opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400 ml-2">
-                                        <x-lucide-trash class="w-6" />
-                                    </button>
+                                    @if (!isset($viewing_user) || (isset($viewing_user) && $viewing_user->id === Auth::id()))
+                                        <button type="submit"
+                                            class="relative flex items-center justify-center w-6 opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400 ml-2">
+                                            <x-lucide-trash class="w-6" />
+                                        </button>
+                                    @endif
                                 </div>
 
                                 <div class="flex flex-col gap-2 w-full">
