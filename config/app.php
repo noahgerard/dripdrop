@@ -135,7 +135,7 @@ return [
             'coldbrew' => 'Cold Brew',
             'mocha' => 'Mocha',
             'monster' => 'Monster',
-            'neurogum' => 'Neurogum',
+            'neurogum' => 'Neuro Gum',
             'tea' => 'Tea',
             'matcha' => 'Matcha',
             'other' => 'Other',

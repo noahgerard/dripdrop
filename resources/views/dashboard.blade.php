@@ -1,22 +1,27 @@
 <x-app-layout>
     <div class="py-12 mt-[5%]">
         <div class="flex flex-col gap-4 max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 class="text-2xl font-bold">
+            <a class="text-2xl font-bold">
                 @if (isset($viewing_user))
                     {{ $viewing_user->name }}'s Stats
                 @else
                     Your Stats
                 @endif
-            </h2>
+                </h2>
+            </a>
             <x-user-stats :user_stats="$user_stats" />
 
-            <h2 class="text-2xl font-bold mt-8">
-                @if (isset($viewing_user))
+            @if (isset($viewing_user))
+                <a href="{{ route('department.show', parameters: ['id' => $viewing_user->department->id]) }}"
+                    class="text-2xl font-bold mt-8">
                     {{ $viewing_user->department->name ?? 'Department' }}'s Stats
-                @else
+                </a>
+            @else
+                <a href="{{ route('department.show', parameters: ['id' => Auth::user()->department->id]) }}"
+                    class="text-2xl font-bold mt-8">
                     Your Department Stats ({{ Auth::user()->department->name }})
-                @endif
-            </h2>
+                </a>
+            @endif
             <x-department-stats :dep_stats="$dep_stats" />
 
             <h2 class="text-2xl font-bold mt-8">Coffee Chart</h2>
@@ -34,7 +39,7 @@
                     @endif
                 </h2>
             </div>
-            <div class="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-2 sm:p-4">
+            <div class="flex flex-col gap-4">
                 @forelse ($user_stats['last_n_coffees'] as $coffee)
                     <x-coffee-entry :coffee="$coffee" :showUser="false" />
                 @empty

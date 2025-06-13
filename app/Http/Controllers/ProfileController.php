@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
 
-use function PHPUnit\Framework\isEmpty;
-
 class ProfileController extends Controller
 {
     /**
@@ -77,7 +75,7 @@ class ProfileController extends Controller
      */
     public function show($id): View
     {
-        $user = isEmpty($id) ? Auth::user()->with('department') : User::with('department')->findOrFail($id);
+        $user = is_null($id) ? Auth::user() : User::findOrFail($id);
 
         $user_stats = $user->stats();
         $dep_stats = $user->department ? $user->department->stats() : [];
