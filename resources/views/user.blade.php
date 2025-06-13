@@ -2,26 +2,25 @@
     <div class="py-12 mt-[5%]">
         <div class="flex flex-col gap-4 max-w-7xl mx-auto px-6 lg:px-8">
             <a class="text-2xl font-bold">
-                @if (isset($viewing_user))
-                    {{ $viewing_user->name }}'s Stats
-                @else
+                @if ($is_me)
                     Your Stats
+                @else
+                    {{ $user->name }}'s Stats
                 @endif
                 </h2>
             </a>
             <x-user-stats :user_stats="$user_stats" />
 
-            @if (isset($viewing_user))
-                <a href="{{ route('department.show', parameters: ['id' => $viewing_user->department->id]) }}"
-                    class="text-2xl font-bold mt-8">
-                    {{ $viewing_user->department->name ?? 'Department' }}'s Stats
-                </a>
-            @else
-                <a href="{{ route('department.show', parameters: ['id' => Auth::user()->department->id]) }}"
-                    class="text-2xl font-bold mt-8">
-                    Your Department Stats ({{ Auth::user()->department->name }})
-                </a>
-            @endif
+
+            <a href="{{ route('department.view', parameters: ['id' => $user->department->id]) }}"
+                class="text-2xl font-bold mt-8">
+                @if ($is_me)
+                    Your Department Stats ({{ $user->department->name }})
+                @else
+                    {{ $user->department->name ?? 'Department' }}'s Stats
+                @endif
+            </a>
+
             <x-department-stats :dep_stats="$dep_stats" />
 
             <h2 class="text-2xl font-bold mt-8">Coffee Chart</h2>
@@ -32,13 +31,14 @@
 
             <div class="flex justify-between items-end mt-8">
                 <h2 id="timeline" class="text-2xl font-bold">
-                    @if (isset($viewing_user))
-                        {{ $viewing_user->name }}'s Coffees
-                    @else
+                    @if ($is_me)
                         Your Coffees
+                    @else
+                        {{ $user->name }}'s Coffees
                     @endif
                 </h2>
             </div>
+
             <div class="flex flex-col gap-4">
                 @forelse ($user_stats['last_n_coffees'] as $coffee)
                     <x-coffee-entry :coffee="$coffee" :showUser="false" />

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
 
-class ProfileController extends Controller
+class UserController extends Controller
 {
     /**
      * Display the user's profile form.
@@ -71,11 +71,13 @@ class ProfileController extends Controller
     }
 
     /**
-     * Show a public user profile and stats
+     * Show a user profile and stats
      */
-    public function show($id): View
+    public function show($id = null): View
     {
-        $user = is_null($id) ? Auth::user() : User::findOrFail($id);
+        $id ??= Auth::user()->id;
+        $is_me = $id == Auth::user()->id;
+        $user = $is_me ? Auth::user() : User::findOrFail($id);
 
         $user_stats = $user->stats();
         $dep_stats = $user->department ? $user->department->stats() : [];
@@ -85,6 +87,7 @@ class ProfileController extends Controller
             return now()->copy()->subDays(29 - $i)->toDateString();
         });
 
+        // Fetch coffees consumed in last 30 days
         $coffeeCounts = $user->coffees()
             ->where('consumed_at', '>=', now()->copy()->subDays(29))
             ->get()
@@ -92,6 +95,7 @@ class ProfileController extends Controller
                 return $coffee->consumed_at->toDateString();
             });
 
+        // Map dates to number of coffees that day
         $coffee_chart_data = $dates->map(function ($date) use ($coffeeCounts) {
             return [
                 'date' => $date,
@@ -99,11 +103,12 @@ class ProfileController extends Controller
             ];
         });
 
-        return view('dashboard', [
+        return view('user', [
+            'user' => $user,
             'user_stats' => $user_stats,
             'dep_stats' => $dep_stats,
             'coffee_chart_data' => $coffee_chart_data,
-            'viewing_user' => $user,
+            'is_me' => $is_me,
         ]);
     }
 }

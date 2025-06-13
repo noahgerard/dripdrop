@@ -25,7 +25,7 @@
                     </x-nav-link>
 
                     @auth
-                        <x-nav-link :href="route('department.show', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.show')">
+                        <x-nav-link :href="route('department.view', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.view')">
                             {{ __('My Department') }}
                         </x-nav-link>
                     @endauth
@@ -121,7 +121,7 @@
             </x-responsive-nav-link>
 
             @auth
-                <x-responsive-nav-link :href="route('department.show', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.show')">
+                <x-responsive-nav-link :href="route('department.view', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.view')">
                     {{ __('My Department') }}
                 </x-responsive-nav-link>
             @endauth

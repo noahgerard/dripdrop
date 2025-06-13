@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\LeaderboardController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CoffeeController;
@@ -15,15 +15,15 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [UserController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/dashboard', [DashboardController::class, 'view'])->name('dashboard');
+    Route::get('/dashboard', [UserController::class, 'show'])->name('dashboard');
     Route::get('/leaderboard', [LeaderboardController::class, 'view'])->name('leaderboard');
 
-    Route::get('/department/{id}', [DepartmentController::class, 'show'])->name('department.show');
-    Route::get('/user/{id}', [ProfileController::class, 'show'])->name('user.view');
+    Route::get('/department/{id}', [DepartmentController::class, 'show'])->name('department.view');
+    Route::get('/user/{id}', [UserController::class, 'show'])->name('user.view');
 });
 
 require __DIR__ . '/auth.php';
