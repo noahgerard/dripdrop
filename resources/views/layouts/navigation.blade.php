@@ -11,7 +11,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
@@ -20,14 +20,14 @@
                         {{ __('Leaderboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('coffee.view')" :active="request()->routeIs('coffee')">
-                        {{ __('Custom') }}
+                    <x-nav-link class="flex items-center gap-2" :href="route('coffee.view')" :active="request()->routeIs('coffee')">
+                        {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
                     </x-nav-link>
                 </div>
             </div>
 
             <!-- Drink Coffee button -->
-            @auth
+            {{-- @auth
                 <form method="POST" class="flex items-center" action="{{ route('coffee.create') }}" id="coffee-form">
                     @csrf
                     <button type="submit" id="coffee-btn"
@@ -35,7 +35,7 @@
                         I drinked coffee <x-lucide-coffee class="w-5" />
                     </button>
                 </form>
-            @endauth
+            @endauth --}}
 
             <!-- Settings Dropdown -->
             @auth
@@ -110,8 +110,8 @@
                 {{ __('Leaderboard') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('coffee.view')" :active="request()->routeIs('coffee')">
-                {{ __('Custom') }}
+            <x-responsive-nav-link class="flex items-center gap-2" :href="route('coffee.view')" :active="request()->routeIs('coffee')">
+                {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
             </x-responsive-nav-link>
 
             @guest
