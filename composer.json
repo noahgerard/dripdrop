@@ -12,6 +12,8 @@
         "php": "^8.2",
         "blade-ui-kit/blade-icons": "^1.8",
         "doctrine/dbal": "^4.2",
+        "intervention/image": "^3.11",
+        "intervention/image-laravel": "^1.5",
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.21",
         "laravel/tinker": "^2.10.1",

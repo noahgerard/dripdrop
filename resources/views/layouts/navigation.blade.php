@@ -19,6 +19,10 @@
                     <x-nav-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')">
                         {{ __('Leaderboard') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('coffee.view')" :active="request()->routeIs('coffee')">
+                        {{ __('Custom') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -27,8 +31,8 @@
                 <form method="POST" class="flex items-center" action="{{ route('coffee.create') }}" id="coffee-form">
                     @csrf
                     <button type="submit" id="coffee-btn"
-                        class="bg-red-400 p-2 h-fit text-white font-bold hover:cursor-pointer transition-transform hover:scale-y-95 hover:scale-x-105">
-                        I drinked coffee
+                        class="bg-red-400 flex items-center gap-2 p-2 h-fit text-white font-bold hover:cursor-pointer transition-transform hover:scale-y-95 hover:scale-x-105">
+                        I drinked coffee <x-lucide-coffee class="w-5" />
                     </button>
                 </form>
             @endauth
@@ -104,6 +108,10 @@
 
             <x-responsive-nav-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')">
                 {{ __('Leaderboard') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('coffee.view')" :active="request()->routeIs('coffee')">
+                {{ __('Custom') }}
             </x-responsive-nav-link>
 
             @guest

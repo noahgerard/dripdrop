@@ -9,10 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class CoffeeController extends Controller
 {
+    public function view(Request $request): View
+    {
+        return view('create-coffee');
+    }
+
     /**
      * Create a coffee
      */
@@ -21,13 +29,50 @@ class CoffeeController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['consumed_at'] = now();
 
-        Coffee::create($data);
 
-        // Log coffee creation
-        Log::info('Coffee created', [
-            'user_id' => $data['user_id'],
-            'timestamp' => now()->toIso8601ZuluString(),
-        ]);
+        if ($request->input('custom') == 'yes') {
+            Log::info('', $data);
+
+            $types = config('app.coffee.types');
+
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'desc' => 'required|string|max:1000',
+                'coffee_type' => 'required|string|in:' . implode(',', array_keys($types)),
+                'coffee_image' => 'required|image|max:4096',
+            ]);
+
+            $data['is_custom'] = true;
+            $data['title'] = $validated['title'];
+            $data['desc'] = $validated['desc'];
+            $data['type'] = $validated['coffee_type'];
+
+            $image = $request->file('coffee_image');
+
+            $apiKey = env('IMGBB_API_KEY');
+            $uploadPath = $image->getRealPath();
+            $uploadName = $image->getClientOriginalName();
+            $response = Http::attach(
+                'image',
+                fopen($uploadPath, 'r'),
+                $uploadName
+            )->post('https://api.imgbb.com/1/upload', [
+                'key' => $apiKey,
+            ]);
+
+            if ($response->successful() && isset($response['data']['url'], $response['data']['delete_url'])) {
+                Log::info('' . $response['data']['url']);
+                $data['img_url'] = $response['data']['medium']['url'];
+                $data['del_img_url'] = $response['data']['delete_url'];
+            } else {
+                dd($response);
+                return back()->withErrors(['coffee_image' => 'Image upload failed.']);
+            }
+        } else {
+            Log::info('YEEEEE');
+        }
+
+        Coffee::create($data);
 
         return Redirect::route('dashboard')->with('status', 'coffee-created');
     }
@@ -51,6 +96,20 @@ class CoffeeController extends Controller
         ])->first();
 
         if ($coffee) {
+            if ($coffee->is_custom && !empty($coffee->del_img_url)) {
+                // Delete image from imgbb first
+                try {
+                    Http::get($coffee->del_img_url);
+                } catch (\Exception $e) {
+                    Log::warning('Failed to delete imgbb image', [
+                        'user_id' => $request->user()->id,
+                        'coffee_id' => $data['id'],
+                        'del_img_url' => $coffee->del_img_url,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+
             $coffee->delete();
 
             // Log coffee deletion

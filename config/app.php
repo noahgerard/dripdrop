@@ -123,4 +123,22 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /**
+     * COFFEE CONFIG
+     */
+    'coffee' => [
+        'types' => [
+            'espresso' => 'Espresso',
+            'latte' => 'Latte',
+            'cappuccino' => 'Cappuccino',
+            'americano' => 'Americano',
+            'coldbrew' => 'Cold Brew',
+            'mocha' => 'Mocha',
+            'tea' => 'Tea...',
+
+            'other' => 'Other',
+        ],
+    ],
+
+    'imgbb_key' => env('IMGBB_API_KEY')
 ];

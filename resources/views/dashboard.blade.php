@@ -35,29 +35,70 @@
 
 
             <div class="flex justify-between items-end mt-8">
-                <h2 id="timeline" class="text-2xl font-bold">Personal Timeline</h2>
-                <h4 id="timeline" class="text-md text-gray-400">Hover over entry to delete</h4>
+                <h2 id="timeline" class="text-2xl font-bold">Your Coffees</h2>
             </div>
             <div class="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-2 sm:p-4">
                 @forelse ($user_stats['last_n_coffees'] as $coffee)
-                    <form method="POST" action="{{ route(name: 'coffee.delete') }}" class="flex gap-2 h-fit group">
-                        @csrf
-                        @method('delete')
-                        <input type="hidden" name="id" value="{{ $coffee->id }}" />
-                        <div
-                            class="flex w-full items-center gap-4 p-3 rounded-lg bg-gray-50 shadow-sm hover:bg-yellow-50 transition-all -mr-2 group-hover:mr-2">
-                            <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
-                            <span class="font-semibold text-gray-800 local-coffee-date"
-                                data-iso="{{ $coffee->consumed_at }}"></span>
-                            <span class="text-gray-500 text-sm ml-auto local-coffee-time"
-                                data-iso="{{ $coffee->consumed_at }}"></span>
-                        </div>
-                        <button type="submit"
-                            class="relative flex items-center justify-center w-6 opacity-100 md:w-0 md:opacity-0 md:group-hover:w-6 md:group-hover:opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400">
-                            <x-lucide-trash class="w-6" />
-                        </button>
-                    </form>
+                    @if (!$coffee['is_custom'])
+                        <form method="POST" action="{{ route(name: 'coffee.delete') }}"
+                            class="flex gap-2 h-fit group relative">
+                            @csrf
+                            @method('delete')
+                            <input type="hidden" name="id" value="{{ $coffee->id }}" />
+                            <div
+                                class="flex w-full items-center gap-4 p-3 rounded-lg bg-gray-50 shadow-sm hover:bg-yellow-50 transition-all">
+                                <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
+                                <span class="font-semibold text-gray-800 local-coffee-date"
+                                    data-iso="{{ $coffee->consumed_at }}"></span>
+                                <span class="text-gray-500 text-sm ml-auto local-coffee-time"
+                                    data-iso="{{ $coffee->consumed_at }}"></span>
+                                <button type="submit"
+                                    class="relative flex items-center justify-center w-6 opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400 ml-2">
+                                    <x-lucide-trash class="w-6" />
+                                </button>
+                            </div>
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route(name: 'coffee.delete') }}"
+                            class="flex gap-2 h-fit group relative">
+                            @csrf
+                            @method('delete')
+                            <input type="hidden" name="id" value="{{ $coffee->id }}" />
+                            <div
+                                class="flex flex-col w-full gap-4 p-3 rounded-lg bg-yellow-50 shadow-sm hover:bg-yellow-100 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+                                    <span class="font-semibold text-gray-800 local-coffee-date"
+                                        data-iso="{{ $coffee->consumed_at }}"></span>
+                                    <span class="text-gray-500 text-sm ml-auto local-coffee-time"
+                                        data-iso="{{ $coffee->consumed_at }}"></span>
+                                    <button type="submit"
+                                        class="relative flex items-center justify-center w-6 opacity-100 transition-all duration-300 ease-in-out overflow-hidden text-slate-400 hover:text-red-400 ml-2">
+                                        <x-lucide-trash class="w-6" />
+                                    </button>
+                                </div>
 
+                                <div class="flex flex-col gap-2 w-full">
+
+                                    <div class="font-bold text-lg text-yellow-900 flex gap-2 items-center">
+                                        {{ $coffee->title }}
+                                        <span
+                                            class="inline-block px-2 py-0.5 text-xs rounded-md bg-yellow-600 text-white font-bold">{{ $coffee->type }}</span>
+                                    </div>
+                                    <div class="text-gray-700 text-sm">{{ $coffee->desc }}</div>
+                                </div>
+                                @if (!empty($coffee->img_url))
+                                    <div
+                                        class="flex-shrink-0 w-32 h-32 rounded-md overflow-hidden border border-yellow-200 bg-white flex items-center justify-center">
+                                        <img src="{{ $coffee->img_url }}" alt="Coffee image"
+                                            class="object-contain w-full h-full" />
+                                    </div>
+                                @endif
+
+
+                            </div>
+                        </form>
+                    @endif
                 @empty
                     <div class="text-gray-400 text-center py-4">No coffee entries yet.</div>
                 @endforelse
