@@ -17,8 +17,7 @@
                         </a>
 
                         @if ($user->id == Auth::user()->id)
-                            <span
-                                class="inline-block px-2 py-0.5 text-xs rounded-md bg-green-600 text-white font-bold">You</span>
+                            <x-chip color="bg-green-600" label="You" />
                         @endif
                         <span class="text-gray-500 text-sm ml-auto">{{ $user->coffees_count }} coffees</span>
                     </div>

@@ -41,7 +41,7 @@
 
             <div class="flex flex-col gap-4">
                 @forelse ($user_stats['last_n_coffees'] as $coffee)
-                    <x-coffee-entry :coffee="$coffee" :showUser="false" />
+                    <x-coffee-entry :coffee="$coffee" />
                 @empty
                     <div class="text-gray-400 text-center py-4">No coffee entries yet.</div>
                 @endforelse

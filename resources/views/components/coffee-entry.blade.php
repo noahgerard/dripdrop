@@ -1,6 +1,9 @@
+@props(['coffee'])
+
 <div class="flex flex-col w-full gap-4 p-6 rounded-lg bg-white shadow-sm transition-all">
     <div class="flex items-center gap-2">
-        <div><img src="https://placehold.co/400" class="w-10 h-10 rounded-full" alt=""></div>
+        <div><img src={{ $coffee->user->avatar ?? 'https://placehold.co/400' }} class="w-10 h-10 rounded-full"
+                alt="Profile Picture"></div>
         <div class="flex flex-col">
             <h2 class="font-semibold">{{ $coffee->user->name }}</h2>
             <h4 class="text-sm">{{ $coffee->user->department->name }}</h4>

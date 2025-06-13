@@ -14,9 +14,9 @@
             <x-user-list :users="$department->users" />
 
             <h2 class="text-2xl font-bold mt-8">Recent Coffees</h2>
-            <div class="flex flex-col gap-4 bg-white rounded-2xl shadow-lg p-2 sm:p-4">
+            <div class="flex flex-col gap-4">
                 @forelse ($recent_coffees as $coffee)
-                    <x-coffee-entry :coffee="$coffee" :showUser="true" />
+                    <x-coffee-entry :coffee="$coffee" />
                 @empty
                     <div class="text-gray-400 text-center py-4">No coffee entries yet.</div>
                 @endforelse
