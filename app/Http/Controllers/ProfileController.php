@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Department;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ProfileController extends Controller
 {
@@ -68,5 +70,42 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Show a public user profile and stats
+     */
+    public function show($id): View
+    {
+        $user = isEmpty($id) ? Auth::user()->with('department') : User::with('department')->findOrFail($id);
+
+        $user_stats = $user->stats();
+        $dep_stats = $user->department ? $user->department->stats() : [];
+
+        // Chart data (last 30 days)
+        $dates = collect(range(0, 29))->map(function ($i) {
+            return now()->copy()->subDays(29 - $i)->toDateString();
+        });
+
+        $coffeeCounts = $user->coffees()
+            ->where('consumed_at', '>=', now()->copy()->subDays(29))
+            ->get()
+            ->groupBy(function ($coffee) {
+                return $coffee->consumed_at->toDateString();
+            });
+
+        $coffee_chart_data = $dates->map(function ($date) use ($coffeeCounts) {
+            return [
+                'date' => $date,
+                'count' => isset($coffeeCounts[$date]) ? $coffeeCounts[$date]->count() : 0,
+            ];
+        });
+
+        return view('dashboard', [
+            'user_stats' => $user_stats,
+            'dep_stats' => $dep_stats,
+            'coffee_chart_data' => $coffee_chart_data,
+            'viewing_user' => $user,
+        ]);
     }
 }

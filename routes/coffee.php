@@ -8,5 +8,3 @@ Route::middleware('auth')->group(function () {
     Route::post('/coffee', [CoffeeController::class, 'create'])->name('coffee.create');
     Route::delete('/coffee', [CoffeeController::class, 'delete'])->name('coffee.delete');
 });
-
-Route::middleware('auth')->get('/user/{id}', [CoffeeController::class, 'userDashboard'])->name('user.dashboard');

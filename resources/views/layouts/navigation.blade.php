@@ -23,6 +23,12 @@
                     <x-nav-link class="flex items-center gap-2" :href="route('coffee.view')" :active="request()->routeIs('coffee')">
                         {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
                     </x-nav-link>
+
+                    @auth
+                        <x-nav-link :href="route('department.show', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.show')">
+                            {{ __('My Department') }}
+                        </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
@@ -114,10 +120,17 @@
                 {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
             </x-responsive-nav-link>
 
+            @auth
+                <x-responsive-nav-link :href="route('department.show', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.show')">
+                    {{ __('My Department') }}
+                </x-responsive-nav-link>
+            @endauth
+
             @guest
                 <x-responsive-nav-link :href="route('register')">
                     {{ __('Get Started') }}
-            </x-responsive-nav-link> @endguest
+                </x-responsive-nav-link>
+            @endguest
         </div>
 
         <!-- Responsive Settings Options -->
