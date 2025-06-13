@@ -5,8 +5,15 @@
         <div><img src={{ $coffee->user->avatar ?? 'https://placehold.co/400' }} class="w-10 h-10 rounded-full"
                 alt="Profile Picture"></div>
         <div class="flex flex-col">
-            <h2 class="font-semibold">{{ $coffee->user->name }}</h2>
-            <h4 class="text-sm">{{ $coffee->user->department->name }}</h4>
+
+            <a href="{{ route('user.view', parameters: ['id' => $coffee->user->id]) }}" class="hover:underline">
+                <h2 class="font-semibold">{{ $coffee->user->name }}</h2>
+            </a>
+
+            <a href="{{ route('department.view', parameters: ['id' => $coffee->user->department->id]) }}" class="hover:underline">
+                <h4 class="text-sm">{{ $coffee->user->department->name }}</h4>
+            </a>
+
         </div>
         @if ($coffee->user->id == Auth::user()->id)
             <div class="ml-auto relative" x-data="{ open: false }">

@@ -13,12 +13,13 @@
 
 
             <a href="{{ route('department.view', parameters: ['id' => $user->department->id]) }}"
-                class="text-2xl font-bold mt-8">
+                class="text-2xl font-bold mt-8 hover:underline">
                 @if ($is_me)
                     Your Department Stats ({{ $user->department->name }})
                 @else
                     {{ $user->department->name ?? 'Department' }}'s Stats
                 @endif
+                🔗
             </a>
 
             <x-department-stats :dep_stats="$dep_stats" />
