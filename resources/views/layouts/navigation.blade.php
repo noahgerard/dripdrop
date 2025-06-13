@@ -25,8 +25,8 @@
                     </x-nav-link>
 
                     @auth
-                        <x-nav-link :href="route('department.view', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.view')">
-                            {{ __('My Department') }}
+                        <x-nav-link :href="route('feed.view')" :active="request()->routeIs('feed')">
+                            {{ __('Feed') }}
                         </x-nav-link>
                     @endauth
                 </div>
@@ -125,8 +125,8 @@
             </x-responsive-nav-link>
 
             @auth
-                <x-responsive-nav-link :href="route('department.view', ['id' => Auth::user()->department_id])" :active="request()->routeIs('department.view')">
-                    {{ __('My Department') }}
+                <x-responsive-nav-link :href="route('feed.view')" :active="request()->routeIs('feed')">
+                    {{ __('Feed') }}
                 </x-responsive-nav-link>
             @endauth
 

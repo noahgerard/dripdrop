@@ -15,14 +15,8 @@ class LeaderboardController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\View
      */
-    public function view(Request $request): View
+    public function show(Request $request): View
     {
-        // Time to Live (minutes)
-        $ttl = 60 * 5;
-
-        $userPage = $request->input('user_lb', 1);
-        $depPage = $request->input('dep_lb', 1);
-
         $user_leaderboard = User::leaderboard();
         $dep_leaderboard = Department::leaderboard();
 

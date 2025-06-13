@@ -2,17 +2,13 @@
 
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\CoffeeController;
+use App\Http\Controllers\FeedController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-
 
 Route::get('/', function () {
     return view('home');
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [UserController::class, 'edit'])->name('profile.edit');
@@ -20,7 +16,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/dashboard', [UserController::class, 'show'])->name('dashboard');
-    Route::get('/leaderboard', [LeaderboardController::class, 'view'])->name('leaderboard');
+    Route::get('/leaderboard', [LeaderboardController::class, 'show'])->name('leaderboard');
+    Route::get('/feed', [FeedController::class, 'show'])->name('feed.view');
 
     Route::get('/department/{id}', [DepartmentController::class, 'show'])->name('department.view');
     Route::get('/user/{id}', [UserController::class, 'show'])->name('user.view');
