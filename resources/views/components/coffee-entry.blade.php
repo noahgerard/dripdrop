@@ -10,7 +10,8 @@
                 <h2 class="font-semibold">{{ $coffee->user->name }}</h2>
             </a>
 
-            <a href="{{ route('department.view', parameters: ['id' => $coffee->user->department->id]) }}" class="hover:underline">
+            <a href="{{ route('department.view', parameters: ['id' => $coffee->user->department->id]) }}"
+                class="hover:underline">
                 <h4 class="text-sm">{{ $coffee->user->department->name }}</h4>
             </a>
 
@@ -31,6 +32,7 @@
                     style="display: none;">
                     <form method="POST" action="{{ route('coffee.delete') }}">
                         @csrf
+                        @method('delete')
                         <input type="hidden" name="id" value="{{ $coffee->id }}">
                         <button type="submit"
                             class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Delete</button>
@@ -48,7 +50,7 @@
         @if (!empty($coffee->img_url))
             <div
                 class="flex-shrink-0 max-w-[20rem] max-h-[20rem] rounded-md overflow-hidden border bg-white flex items-center justify-center">
-                <img src="{{ $coffee->img_url }}" alt="Coffee image" class="object-contain w-full h-full" />
+                <img src="{{ Storage::disk('s3')->url($coffee->img_url) }}" alt="Coffee image" class="object-contain w-full h-full" />
             </div>
         @else
             <x-lucide-coffee class="w-10 h-10 text-slate-200" />

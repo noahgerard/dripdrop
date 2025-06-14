@@ -18,14 +18,32 @@
                 <form method="POST" action="{{ route(name: 'coffee.create') }}" enctype="multipart/form-data"
                     class="flex flex-col gap-2" x-data="{
                         previewUrl: null,
-                        handleFileChange(event) {
+                        handleFileChange: async function(event) {
                             const file = event.target.files[0];
                             if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (e) => {
-                                    this.previewUrl = e.target.result;
+                                // Compress image using browser-image-compression
+                                const options = {
+                                    maxSizeMB: 0.5,
+                                    maxWidthOrHeight: 1024,
+                                    useWebWorker: true
                                 };
-                                reader.readAsDataURL(file);
+                                try {
+                                    let compressedBlob = await imageCompression(file, options);
+                                    // Convert Blob to File
+                                    let compressedFile = new File([compressedBlob], file.name, { type: compressedBlob.type });
+                                    // Set preview
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        this.previewUrl = e.target.result;
+                                    };
+                                    reader.readAsDataURL(compressedFile);
+                                    // Replace file in input
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(compressedFile);
+                                    event.target.files = dataTransfer.files;
+                                } catch (error) {
+                                    alert('Image compression failed: ' + error.message);
+                                }
                             } else {
                                 this.previewUrl = null;
                             }
@@ -78,4 +96,5 @@
 
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
 </x-app-layout>

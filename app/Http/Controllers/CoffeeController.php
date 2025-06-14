@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Coffee;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
-use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class CoffeeController extends Controller
@@ -30,51 +25,37 @@ class CoffeeController extends Controller
         $data['user_id'] = $request->user()->id;
         $data['consumed_at'] = now();
 
+        $types = config('app.coffee.types');
 
-        if ($request->input('custom') == 'yes') {
-            Log::info('', $data);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'desc' => 'required|string|max:1000',
+            'coffee_type' => 'required|string|in:' . implode(',', array_keys($types)),
+            'coffee_image' => 'nullable|image|max:600',
+        ]);
 
-            $types = config('app.coffee.types');
+        $data['title'] = $validated['title'];
+        $data['desc'] = $validated['desc'];
+        $data['type'] = $validated['coffee_type'];
 
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'desc' => 'required|string|max:1000',
-                'coffee_type' => 'required|string|in:' . implode(',', array_keys($types)),
-                'coffee_image' => 'nullable|image|max:4096', // changed to nullable
-            ]);
+        if ($request->hasFile('coffee_image')) {
+            $image = $request->file('coffee_image');
+            $randomName = uniqid('coffee_', true) . '.' . $image->getClientOriginalExtension();
 
-            $data['is_custom'] = true;
-            $data['title'] = $validated['title'];
-            $data['desc'] = $validated['desc'];
-            $data['type'] = $validated['coffee_type'];
+            try {
+                $s3Path = $image->storeAs('coffees', $randomName, 's3');
 
-            if ($request->hasFile('coffee_image')) {
-                $image = $request->file('coffee_image');
-
-                $apiKey = env('IMGBB_API_KEY');
-                $uploadPath = $image->getRealPath();
-                $uploadName = $image->getClientOriginalName();
-                $response = Http::attach(
-                    'image',
-                    fopen($uploadPath, 'r'),
-                    $uploadName
-                )->post('https://api.imgbb.com/1/upload', [
-                    'key' => $apiKey,
+                $data['img_url'] = $s3Path;
+            } catch (\Exception $e) {
+                Log::error('Coffee create: exception during S3 upload', [
+                    'random_name' => $randomName,
+                    'user_id' => $request->user()->id,
+                    'size_bytes' => $image->getSize(),
+                    'mime_type' => $image->getMimeType(),
+                    'exception_message' => $e->getMessage(),
                 ]);
-
-                if ($response->successful() && isset($response['data']['url'], $response['data']['delete_url'])) {
-                    $data['img_url'] = $response['data']['medium']['url'];
-                    $data['del_img_url'] = $response['data']['delete_url'];
-                } else {
-                    Log::error('Image upload failed', [
-                        'user_id' => $request->user()->id,
-                        'response' => $response->json(),
-                        'status' => $response->status(),
-                    ]);
-                    return back()->withErrors(['coffee_image' => 'Image upload failed.']);
-                }
+                return Redirect::route('dashboard')->with('status', 's3-upload-exception');
             }
-        } else {
         }
 
         Coffee::create($data);
@@ -95,23 +76,25 @@ class CoffeeController extends Controller
             return Redirect::route('dashboard')->with('status', 'no-id');
         }
 
+        // Find coffee that matches ID and session user
         $coffee = Coffee::where([
             'id' => $data['id'],
             'user_id' => $request->user()->id,
         ])->first();
 
         if ($coffee) {
-            if ($coffee->is_custom && !empty($coffee->del_img_url)) {
-                // Delete image from imgbb first
+            if (!empty($coffee->img_url)) {
+                // Delete image from S3
                 try {
-                    Http::delete($coffee->del_img_url);
+                    Storage::disk('s3')->delete($coffee->img_url);
                 } catch (\Exception $e) {
-                    Log::warning('Failed to delete imgbb image', [
+                    Log::warning('Failed to delete S3 image', [
                         'user_id' => $request->user()->id,
                         'coffee_id' => $data['id'],
-                        'del_img_url' => $coffee->del_img_url,
+                        'img_url' => $coffee->img_url,
                         'error' => $e->getMessage(),
                     ]);
+                    return Redirect::route('dashboard')->with('status', 'error');
                 }
             }
 

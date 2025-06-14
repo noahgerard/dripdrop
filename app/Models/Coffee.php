@@ -9,7 +9,6 @@ class Coffee extends Model
     protected $fillable = [
         'user_id',
         'consumed_at',
-        'is_custom',
         'title',
         'desc',
         'img_url',
@@ -18,8 +17,7 @@ class Coffee extends Model
     ];
 
     protected $casts = [
-        'consumed_at' => 'datetime',
-        'is_custom' => 'bool'
+        'consumed_at' => 'datetime'
     ];
 
     public function user()
