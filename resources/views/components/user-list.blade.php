@@ -8,6 +8,9 @@
     @forelse ($users as $user)
         <div class="flex items-center gap-4 p-3 rounded-lg bg-gray-50 shadow-sm hover:bg-yellow-50 transition">
             <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
+
+            <img src={{ $user->avatar() }} class="w-10 h-10 rounded-full" alt="Profile Picture"></img>
+
             <a href="{{ route('user.view', ['id' => $user->id]) }}" class="font-semibold text-gray-800 hover:underline">
                 {{ $user->name }}
 

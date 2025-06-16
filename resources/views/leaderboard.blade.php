@@ -9,6 +9,7 @@
                 <h2 class="text-2xl font-bold">User Leaderboard ({{ $user_leaderboard->total() }})</h2>
                 <h2 class="text-md text-gray-400">This week</h2>
             </div>
+            
 
             <x-user-list :users="$user_leaderboard" show_department />
             <div class="mt-4">
