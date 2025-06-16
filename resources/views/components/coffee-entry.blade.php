@@ -2,8 +2,8 @@
 
 <div class="flex flex-col w-full gap-4 p-6 rounded-lg bg-white shadow-sm transition-all">
     <div class="flex items-center gap-2">
-        <div><img src={{ $coffee->user->avatar ?? 'https://placehold.co/400' }} class="w-10 h-10 rounded-full"
-                alt="Profile Picture"></div>
+        <div><img src={{ Storage::disk('s3')->url($coffee->user->avatar) ?? 'https://placehold.co/400' }}
+                class="w-10 h-10 rounded-full" alt="Profile Picture"></div>
         <div class="flex flex-col">
 
             <a href="{{ route('user.view', parameters: ['id' => $coffee->user->id]) }}" class="hover:underline">
@@ -50,7 +50,8 @@
         @if (!empty($coffee->img_url))
             <div
                 class="flex-shrink-0 max-w-[20rem] max-h-[20rem] rounded-md overflow-hidden border bg-white flex items-center justify-center">
-                <img src="{{ Storage::disk('s3')->url($coffee->img_url) }}" alt="Coffee image" class="object-contain w-full h-full" />
+                <img src="{{ Storage::disk('s3')->url($coffee->img_url) }}" alt="Coffee image"
+                    class="object-contain w-full h-full" />
             </div>
         @else
             <x-lucide-coffee class="w-10 h-10 text-slate-200" />

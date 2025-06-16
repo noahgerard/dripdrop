@@ -54,7 +54,8 @@
             <x-input-label for="avatar" :value="__('Profile Picture')" />
             @if ($user->avatar)
                 <div class="mb-2">
-                    <img src="{{ $user->avatar }}" alt="Current Avatar" class="h-16 w-16 rounded-full object-cover">
+                    <img src="{{ Storage::disk('s3')->url($user->avatar) }}" alt="Current Avatar"
+                        class="h-16 w-16 rounded-full object-cover">
                 </div>
             @endif
             <input id="avatar" name="avatar" type="file" class="mt-1 block w-full" accept="image/*">

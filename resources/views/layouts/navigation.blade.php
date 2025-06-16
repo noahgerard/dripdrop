@@ -51,7 +51,7 @@
                             <button
                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
 
-                                <div class="mr-2"><img src={{ Auth::user()->avatar ?? 'https://placehold.co/400' }}
+                                <div class="mr-2"><img src={{ Storage::disk('s3')->url(Auth::user()->avatar) ?? 'https://placehold.co/400' }}
                                         class="w-10 h-10 rounded-full" alt="Profile Picture"></div>
 
                                 <div>{{ Auth::user()->name }}</div>
