@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
@@ -36,13 +37,20 @@ class UserController extends Controller
         $user = Auth::user();
         $user->fill($request->validated());
 
-        if (request()->hasFile('avatar')) {
-            $avatar = request()->file('avatar');
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
             $randomName = uniqid('avatar_', true) . '.' . $avatar->getClientOriginalExtension();
             try {
                 $s3Path = $avatar->storeAs('avatars', $randomName, 's3');
                 $user->avatar = $s3Path;
             } catch (\Exception $e) {
+                Log::error('Profile update: exception during S3 avatar upload', [
+                    'random_name' => $randomName,
+                    'user_id' => $user->id,
+                    'size_bytes' => $avatar->getSize(),
+                    'mime_type' => $avatar->getMimeType(),
+                    'exception_message' => $e->getMessage(),
+                ]);
                 return Redirect::route('profile.edit')->withErrors(['avatar' => 'Failed to upload avatar: ' . $e->getMessage()]);
             }
         }
