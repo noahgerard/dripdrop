@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+@endphp
+
 <x-app-layout>
     <div class="py-12 mt-[5%]">
         <div class="flex flex-col gap-4 max-w-7xl mx-auto px-6 lg:px-8">
@@ -16,9 +20,16 @@
                             {{ $user->name }} [{{ $user->department->name }}]
                         </a>
 
-                        @if ($user->id == Auth::user()->id)
-                            <x-chip color="bg-green-600" label="You" />
-                        @endif
+                        <div class="flex gap-2">
+                            @if ($user->id == Auth::user()->id)
+                                <x-chip color="bg-green-600" label="You" />
+                            @endif
+
+                            @if (Carbon::createFromDate($user->created_at)->diffInHours() <= 48)
+                                <x-chip color="bg-red-600" label="NEW" />
+                            @endif
+                        </div>
+
                         <span class="text-gray-500 text-sm ml-auto">{{ $user->coffees_count }} coffees</span>
                     </div>
                 @empty
