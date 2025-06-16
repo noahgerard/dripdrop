@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -32,13 +33,25 @@ class UserController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = Auth::user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if (request()->hasFile('avatar')) {
+            $avatar = request()->file('avatar');
+            $randomName = uniqid('avatar_', true) . '.' . $avatar->getClientOriginalExtension();
+            try {
+                $s3Path = $avatar->storeAs('avatars', $randomName, 's3');
+                $user->avatar = $s3Path;
+            } catch (\Exception $e) {
+                return Redirect::route('profile.edit')->withErrors(['avatar' => 'Failed to upload avatar: ' . $e->getMessage()]);
+            }
         }
 
-        $request->user()->save();
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
