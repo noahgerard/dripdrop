@@ -2,7 +2,8 @@
 
 <div class="flex flex-col w-full gap-4 p-6 rounded-lg bg-white shadow-sm transition-all">
     <div class="flex items-center gap-2">
-        <div><img src={{ Storage::disk('s3')->url($coffee->user->avatar) ?? 'https://placehold.co/400' }}
+        <div><img
+                src={{ $coffee->user->avatar ? Storage::disk('s3')->url($coffee->user->avatar) : 'https://placehold.co/400' }}
                 class="w-10 h-10 rounded-full" alt="Profile Picture"></div>
         <div class="flex flex-col">
 
