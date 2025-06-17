@@ -63,7 +63,13 @@ class User extends Authenticatable
 
     public function avatar()
     {
-        return $this->avatar ? Storage::disk('s3')->url($this->avatar) : 'https://placehold.co/400';
+        // If avatar begins with avatars/avatar_ then we know it's stored on S3
+        // If not, it must be from SSO
+        return $this->avatar ?
+            (str_starts_with($this->avatar, "avatars/avatar_")
+                ? Storage::url($this->avatar)
+                : $this->avatar)
+            : 'https://placehold.co/400';
     }
 
     public function coffees()
