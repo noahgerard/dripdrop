@@ -3,10 +3,10 @@
 <div class="flex flex-col gap-2 ml-4">
     @foreach ($comments as $comment)
         <div class="flex gap-2 group">
-            <img src="{{ $comment->user->avatar() }}" class="w-6 h-6" />
+            <img src="{{ $comment->user->avatar() }}" class="w-6 h-6 rounded-full" />
             <div class="flex flex-col">
                 <div class="flex items-center gap-2">
-                    <a href={{ $comment->user->avatar() }}
+                    <a href={{ route('user.view', parameters: ['id' => $comment->user->id]) }}
                         class="font-medium hover:underline">{{ $comment->user->name }}</a>
                     <span class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
                 </div>
