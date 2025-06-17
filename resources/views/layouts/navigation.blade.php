@@ -20,7 +20,7 @@
                         {{ __('Leaderboard') }}
                     </x-nav-link>
 
-                    <x-nav-link class="flex items-center gap-2" :href="route('coffee.view')" :active="request()->routeIs('coffee')">
+                    <x-nav-link class="flex items-center gap-2" :href="route('coffee.form')" :active="request()->routeIs('coffee')">
                         {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
                     </x-nav-link>
 
@@ -122,7 +122,7 @@
                 {{ __('Leaderboard') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link class="flex items-center gap-2" :href="route('coffee.view')" :active="request()->routeIs('coffee')">
+            <x-responsive-nav-link class="flex items-center gap-2" :href="route('coffee.form')" :active="request()->routeIs('coffee')">
                 {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
             </x-responsive-nav-link>
 

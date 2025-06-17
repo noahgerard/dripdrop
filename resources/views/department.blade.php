@@ -11,7 +11,10 @@
             </div>
 
             <h2 class="text-2xl font-bold mt-8">Members</h2>
-            <x-user-list :users="$department->users" />
+            <x-user-list :users="$users" />
+            <div class="mt-4">
+                {{ $users->appends(['coffees' => $recent_coffees->currentPage()])->links() }}
+            </div>
 
             <h2 class="text-2xl font-bold mt-8">Recent Coffees</h2>
             <div class="flex flex-col gap-4">
@@ -22,7 +25,7 @@
                 @endforelse
             </div>
             <div class="mt-4">
-                {{ $recent_coffees->links() }}
+                {{ $recent_coffees->appends(['users' => $users->currentPage()])->links() }}
             </div>
         </div>
     </div>
