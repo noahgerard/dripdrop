@@ -11,9 +11,8 @@
 
             <a href="{{ route('department.view', parameters: ['id' => $coffee->user->department->id]) }}"
                 class="hover:underline">
-                <h4 class="text-sm">{{ $coffee->user->department->name }}</h4>
+                <h4 class="text-sm text-slate-500">{{ $coffee->user->department->name }}</h4>
             </a>
-
         </div>
         @if ($coffee->user->id == Auth::user()->id)
             <div class="ml-auto relative" x-data="{ open: false }">
@@ -43,8 +42,11 @@
     </div>
 
     <div class="flex flex-col gap-2">
-        <h2 class="font-bold text-amber-900">{{ $coffee->title ?? 'Coffee' }}</h2>
-        <h4 class="text-amber-800">{{ $coffee->desc }}</h4>
+        <div class="flex flex-col">
+            <h2 class="font-bold text-amber-900">{{ $coffee->title ?? 'Coffee' }}</h2>
+            <h4 class="text-amber-800">{{ $coffee->desc }}</h4>
+
+        </div>
 
         @if (!empty($coffee->img_url))
             <div
@@ -52,8 +54,6 @@
                 <img src="{{ Storage::disk('s3')->url($coffee->img_url) }}" alt="Coffee image"
                     class="object-contain w-full h-full" />
             </div>
-        @else
-            <x-lucide-coffee class="w-10 h-10 text-slate-200" />
         @endif
     </div>
 

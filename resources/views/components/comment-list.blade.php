@@ -1,6 +1,6 @@
 @props(['comments'])
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-2 ml-4">
     @foreach ($comments as $comment)
         <div class="flex gap-2 group">
             <img src="{{ $comment->user->avatar() }}" class="w-6 h-6" />
