@@ -2,9 +2,7 @@
 
 <div class="flex flex-col w-full gap-4 p-6 rounded-lg bg-white shadow-sm transition-all">
     <div class="flex items-center gap-2">
-        <div><img
-                src={{ $coffee->user->avatar() }}
-                class="w-10 h-10 rounded-full" alt="Profile Picture"></div>
+        <div><img src={{ $coffee->user->avatar() }} class="w-10 h-10 rounded-full" alt="Profile Picture"></div>
         <div class="flex flex-col">
 
             <a href="{{ route('user.view', parameters: ['id' => $coffee->user->id]) }}" class="hover:underline">
@@ -21,7 +19,7 @@
             <div class="ml-auto relative" x-data="{ open: false }">
                 <button @click="open = !open" @keydown.escape="open = false" @click.away="open = false" type="button"
                     class="focus:outline-none inline-flex items-center px-2 py-2 border border-transparent rounded-md text-gray-500 bg-white hover:text-gray-700 transition ease-in-out duration-150">
-                    <x-lucide-ellipsis class="w-5 h-5" />
+                    <x-lucide-ellipsis-vertical class="w-5 h-5" />
                 </button>
                 <div x-show="open" x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 transform scale-95"
@@ -67,4 +65,21 @@
             <span class="local-coffee-time" data-iso="{{ $coffee->consumed_at }}"></span>
         </span>
     </div>
+
+    <div class="my-2 px-4 flex-1">
+        <div class="w-full border-t border-slate-200"></div>
+    </div>
+
+    <x-comment-list :comments="$coffee->comments" />
+
+    <form method="POST" action="{{ route(name: 'comment.create') }}" class="w-full flex gap-2 items-center">
+        @csrf
+        <input type="hidden" name="coffee_id" value="{{ $coffee->id }}">
+        <input class="flex-1 p-2 px-4 border-1 border-slate-200 rounded-md text-md" name="content" type="text"
+            required minlength="1" maxlength="255" placeholder="Add a comment">
+        <button type="submit">
+            <x-lucide-reply
+                class="w-6 h-6 text-slate-800 transition-all hover:text-slate-900 hover:cursor-pointer hover:rotate-3" />
+        </button>
+    </form>
 </div>
