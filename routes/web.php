@@ -26,3 +26,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 require __DIR__ . '/coffee.php';
 require __DIR__ . '/comment.php';
+require __DIR__ . '/notification.php';

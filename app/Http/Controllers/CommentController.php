@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Coffee;
 use App\Models\Comment;
+use App\Models\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
 
 class CommentController extends Controller
 {
@@ -27,6 +25,21 @@ class CommentController extends Controller
 
         try {
             $comment = Comment::create($data);
+            // Notify the owner of the coffee post if not the commenter
+            $coffee = Coffee::find($data['coffee_id']);
+            if ($coffee && $coffee->user_id !== Auth::id()) {
+                Notification::create([
+                    'user_id' => $coffee->user_id,
+                    'type' => 'comment',
+                    'data' => [
+                        'comment_id' => $comment->id,
+                        'coffee_id' => $coffee->id,
+                        'content' => $comment->content,
+                        'from_user_id' => Auth::id(),
+                        'from_user_name' => Auth::user()->name,
+                    ],
+                ]);
+            }
         } catch (\Exception $e) {
             return Redirect::back()->withErrors(['error' => 'Failed to create comment.'])->withInput();
         }
