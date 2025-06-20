@@ -104,7 +104,7 @@ class UserController extends Controller
         }
 
         $is_me = $id == Auth::user()->id;
-        $user = $is_me ? Auth::user() : User::find($id)->first();
+        $user = $is_me ? Auth::user() : User::find($id);
 
         if (!$user) {
             abort(404);
