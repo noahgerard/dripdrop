@@ -13,7 +13,7 @@ class NotificationController extends Controller
         $notifications = Notification::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('notifications.index', compact('notifications'));
+        return view('notifications', compact('notifications'));
     }
 
     public function markAsRead(Notification $notification)
