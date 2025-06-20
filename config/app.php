@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -128,19 +127,22 @@ return [
      */
     'coffee' => [
         'types' => [
-            'espresso' => 'Espresso',
-            'latte' => 'Latte',
-            'cappuccino' => 'Cappuccino',
-            'americano' => 'Americano',
-            'coldbrew' => 'Cold Brew',
-            'mocha' => 'Mocha',
-            'monster' => 'Monster',
-            'neurogum' => 'Neuro Gum',
-            'tea' => 'Tea',
-            'matcha' => 'Matcha',
+            'latte' => 'Latte ☕️',
+            'espresso' => 'Espresso 🥃',
+            'americano' => 'Americano 🇺🇸',
+            'drip' => 'Drip Coffee 🫖',
+            'cappuccino' => 'Cappuccino 🧁',
+            'coldbrew' => 'Cold Brew 🧊',
+            'mocha' => 'Mocha 🍫',
+            'tea' => 'Tea 🍵',
+            'matcha' => 'Matcha 🍃',
+            'monster' => 'Monster 🟩',
+            'redbull' => 'Redbull 🟥',
+            'neurogum' => 'Neuro Gum 🧠',
+            'pre' => 'Pre Workout 💪',
             'other' => 'Other',
         ],
     ],
 
-    'imgbb_key' => env('IMGBB_API_KEY')
+    'imgbb_key' => env('IMGBB_API_KEY'),
 ];
