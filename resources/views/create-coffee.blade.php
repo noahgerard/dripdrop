@@ -16,43 +16,7 @@
                 @endif
 
                 <form method="POST" action="{{ route(name: 'coffee.create') }}" enctype="multipart/form-data"
-                    class="flex flex-col gap-2" x-data="{
-                        previewUrl: null,
-                        handleFileChange: async function(event) {
-                            const file = event.target.files[0];
-                            if (file) {
-                                // Compress image using browser-image-compression
-                                const options = {
-                                    maxSizeMB: 0.5,
-                                    maxWidthOrHeight: 1024,
-                                    useWebWorker: true
-                                };
-                                try {
-                                    let compressedBlob = await imageCompression(file, options);
-                                    // Convert Blob to File
-                                    let compressedFile = new File([compressedBlob], file.name, { type: compressedBlob.type });
-                                    // Set preview
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        this.previewUrl = e.target.result;
-                                    };
-                                    reader.readAsDataURL(compressedFile);
-                                    // Replace file in input
-                                    const dataTransfer = new DataTransfer();
-                                    dataTransfer.items.add(compressedFile);
-                                    event.target.files = dataTransfer.files;
-                                } catch (error) {
-                                    alert('Image compression failed: ' + error.message);
-                                }
-                            } else {
-                                this.previewUrl = null;
-                            }
-                        },
-                        removeFile() {
-                            this.previewUrl = null;
-                            $refs.coffee_image.value = '';
-                        }
-                    }">
+                    class="flex flex-col gap-2" x-data="coffeeForm()" @submit.prevent="submitForm">
                     @csrf
 
                     <input class="hidden" name="custom" value="yes">
@@ -88,8 +52,25 @@
                     </template>
 
                     <button type="submit"
-                        class="mt-4 hover:cursor-pointer bg-blue-700 hover:bg-blue-800 transition rounded-md px-4 py-2 flex justify-center items-center gap-2 text-white font-semibold">
-                        <x-lucide-coffee class="w-5 h-5" /> Post
+                        class="mt-4 bg-blue-700 transition rounded-md px-4 py-2 flex justify-center items-center gap-2 text-white font-semibold"
+                        :disabled="submitting || compressing">
+                        <template x-if="submitting">
+                            <svg class="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                            </svg>
+                        </template>
+                        <template x-if="compressing">
+                            <svg class="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                            </svg>
+                        </template>
+                        <x-lucide-coffee class="w-5 h-5" x-show="!submitting && !compressing" />
+                        <span x-show="!submitting && !compressing">Post</span>
                     </button>
                 </form>
             </div>
@@ -97,4 +78,63 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+    <script>
+        function coffeeForm() {
+            return {
+                previewUrl: null,
+                submitting: false,
+                compressing: false,
+                handleFileChange: async function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.compressing = true;
+                        const options = {
+                            maxSizeMB: 0.5,
+                            maxWidthOrHeight: 1024,
+                            useWebWorker: true
+                        };
+                        let compressedBlob = null;
+                        let lastError = null;
+                        for (let attempt = 0; attempt < 5; attempt++) {
+                            try {
+                                compressedBlob = await imageCompression(file, options);
+                                lastError = null;
+                                break;
+                            } catch (error) {
+                                lastError = error;
+                            }
+                        }
+                        if (compressedBlob) {
+                            let compressedFile = new File([compressedBlob], file.name, {
+                                type: compressedBlob.type
+                            });
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                this.previewUrl = e.target.result;
+                            };
+                            reader.readAsDataURL(compressedFile);
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(compressedFile);
+                            event.target.files = dataTransfer.files;
+                        } else {
+                            alert('Image compression failed after 5 attempts: ' + lastError.message);
+                            this.previewUrl = null;
+                            this.$refs.coffee_image.value = '';
+                        }
+                        this.compressing = false;
+                    } else {
+                        this.previewUrl = null;
+                    }
+                },
+                removeFile() {
+                    this.previewUrl = null;
+                    this.$refs.coffee_image.value = '';
+                },
+                submitForm(e) {
+                    this.submitting = true;
+                    e.target.submit();
+                }
+            }
+        }
+    </script>
 </x-app-layout>
