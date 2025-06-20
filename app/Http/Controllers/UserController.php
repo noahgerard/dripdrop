@@ -96,9 +96,18 @@ class UserController extends Controller
      */
     public function show($id = null): View
     {
+        // Validate that id is an integer
+        if (!is_numeric($id) || intval($id) != $id) {
+            abort(404);
+        }
+
         $id ??= Auth::user()->id;
         $is_me = $id == Auth::user()->id;
-        $user = $is_me ? Auth::user() : User::findOrFail($id);
+        $user = $is_me ? Auth::user() : User::find($id)->first();
+
+        if (!$user) {
+            abort(404);
+        }
 
         $user_stats = $user->stats();
         $dep_stats = $user->department ? $user->department->stats() : [];

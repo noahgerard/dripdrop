@@ -10,8 +10,17 @@ class DepartmentController extends Controller
 {
     public function show($id): View
     {
-        $department = Department::with(['coffees.user'])
-            ->findOrFail($id);
+        // Validate that id is an integer
+        if (!is_numeric($id) || intval($id) != $id) {
+            abort(404);
+        }
+
+        $department = Department::with(['coffees.user'])->find($id);
+
+        if (!$department) {
+            abort(404);
+        }
+
         $dep_stats = $department->stats();
 
         // Paginate users

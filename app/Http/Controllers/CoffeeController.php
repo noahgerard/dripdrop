@@ -12,7 +12,22 @@ use Illuminate\View\View;
 
 class CoffeeController extends Controller
 {
-    public function view(Request $request): View
+    public function view($id)
+    {
+        // Validate that id is an integer
+        if (!is_numeric($id) || intval($id) != $id) {
+            abort(404);
+        }
+        $coffee = Coffee::find($id);
+
+        if (!$coffee) {
+            abort(404);
+        }
+
+        return view('view-coffee', ['coffee' => $coffee]);
+    }
+
+    public function form(Request $request)
     {
         return view('create-coffee');
     }
