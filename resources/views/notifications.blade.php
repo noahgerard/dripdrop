@@ -7,7 +7,7 @@
                 <form method="POST" action="{{ route('notifications.markAllAsRead') }}">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="btn btn-sm btn-primary">Mark all as read</button>
+                    <x-primary-button class="!py-1 !px-3 !text-xs">Mark all as read</x-primary-button>
                 </form>
             @endif
         </div>
@@ -22,8 +22,8 @@
                                 commented on your coffee post:
                                 <a href="{{ route('coffee.view', ['id' => $notification->data['coffee_id'] ?? null]) }}"
                                     class="italic underline hover:text-blue-600">"{{ $notification->data['content'] ?? '' }}"</a>
-                            @else
-                                {{ ucfirst($notification->type) }} notification
+                            @elseif ($notification->type === 'reminder')
+                                {{ $notification->data['message'] }}
                             @endif
                         </div>
                         <div class="text-xs text-gray-500 mt-1">
@@ -35,7 +35,7 @@
                             class="ml-4">
                             @csrf
                             @method('PATCH')
-                            <button type="submit" class="btn btn-xs btn-outline-primary">Mark as read</button>
+                            <x-secondary-button class="!py-1 !px-3 !text-xs">Mark as read</x-secondary-button>
                         </form>
                     @endif
                 </div>
@@ -44,6 +44,9 @@
                     No notifications yet.
                 </div>
             @endforelse
+        </div>
+        <div class="mt-4">
+            {{ $notifications->links() }}
         </div>
     </div>
 </x-app-layout>
