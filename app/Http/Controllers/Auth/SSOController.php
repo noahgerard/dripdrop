@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use \App\Models\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -59,12 +60,23 @@ class SSOController extends Controller
     protected function createUserFromSocialProvider(string $provider, ContractsUser $socialUser): User
     {
         // Create user with no password
-        return User::create([
+        $user = User::create([
             'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'Unknown',
             'email' => $socialUser->getEmail(),
             'department_id' => 0,
             'avatar' => $socialUser->getAvatar(),
             "{$provider}_id" => $socialUser->getId(),
         ]);
+
+        // In-house notification: remind to update department
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'reminder',
+            'data' => [
+                'message' => 'Please update your profile (Top right) to select the appropriate department!'
+            ],
+        ]);
+
+        return $user;
     }
 }
