@@ -11,26 +11,29 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                {{-- <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link class="flex items-center gap-2" :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-lucide-house class="w-5 h-5" /> Home
                     </x-nav-link>
 
-                    <x-nav-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')">
-                        {{ __('Leaderboard') }}
+                    <x-nav-link class="flex items-center gap-2" :href="route('leaderboard')" :active="request()->routeIs('leaderboard')">
+                        <x-lucide-trophy class="w-5 h-5" /> Leaderboard
                     </x-nav-link>
 
                     <x-nav-link class="flex items-center gap-2" :href="route('coffee.form')" :active="request()->routeIs('coffee')">
-                        {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
+                        <x-lucide-coffee class="w-5 h-5" /> Log
                     </x-nav-link>
 
                     @auth
-                        <x-nav-link :href="route('feed.view')" :active="request()->routeIs('feed')">
-                            {{ __('Feed') }}
+                        <x-nav-link class="flex items-center gap-2" :href="route('feed.view')" :active="request()->routeIs('feed')">
+                            <x-lucide-newspaper class="w-5 h-5" /> Feed
                         </x-nav-link>
                     @endauth
-                </div>
+                </div> --}}
             </div>
+
+            {{-- Floating Navigation Bar --}}
+            <x-floating-nav />
 
             <!-- Drink Coffee button -->
             {{-- @auth
@@ -92,7 +95,8 @@
             @endauth
 
             @guest
-                <button class="hidden sm:block text-sm"><a href="/register">Get Started</a></button>
+                <button class="hidden sm:block text-sm flex items-center gap-2"><a href="/register"><x-lucide-rocket
+                            class="w-5 h-5" /> Get Started</a></button>
             @endguest
 
 
@@ -118,27 +122,27 @@
 
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            {{-- <x-responsive-nav-link class="flex items-center gap-2" :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                <x-lucide-house class="w-5 h-5" /> Dashboard
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')">
-                {{ __('Leaderboard') }}
+            <x-responsive-nav-link class="flex items-center gap-2" :href="route('leaderboard')" :active="request()->routeIs('leaderboard')">
+                <x-lucide-trophy class="w-5 h-5" /> Leaderboard
             </x-responsive-nav-link>
 
             <x-responsive-nav-link class="flex items-center gap-2" :href="route('coffee.form')" :active="request()->routeIs('coffee')">
-                {{ __('Log') }} <x-lucide-coffee class="w-5 h-5" />
+                <x-lucide-coffee class="w-5 h-5" /> Log
             </x-responsive-nav-link>
 
             @auth
-                <x-responsive-nav-link :href="route('feed.view')" :active="request()->routeIs('feed')">
-                    {{ __('Feed') }}
+                <x-responsive-nav-link class="flex items-center gap-2" :href="route('feed.view')" :active="request()->routeIs('feed')">
+                    <x-lucide-newspaper class="w-5 h-5" /> Feed
                 </x-responsive-nav-link>
-            @endauth
+            @endauth --}}
 
             @guest
-                <x-responsive-nav-link :href="route('register')">
-                    {{ __('Get Started') }}
+                <x-responsive-nav-link class="flex items-center gap-2" :href="route('register')">
+                    <x-lucide-rocket class="w-5 h-5" /> Get Started
                 </x-responsive-nav-link>
             @endguest
         </div>
@@ -153,18 +157,18 @@
 
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
+                    <x-responsive-nav-link class="flex items-center gap-2" :href="route('profile.edit')">
+                        <x-lucide-user class="w-5 h-5" /> Profile
                     </x-responsive-nav-link>
 
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
 
-                        <x-responsive-nav-link :href="route('logout')"
+                        <x-responsive-nav-link class="flex items-center gap-2" :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            <x-lucide-log-out class="w-5 h-5" /> Log Out
                         </x-responsive-nav-link>
                     </form>
                 </div>
