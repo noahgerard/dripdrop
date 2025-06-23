@@ -35,7 +35,7 @@
                             class="ml-4">
                             @csrf
                             @method('PATCH')
-                            <x-secondary-button class="!py-1 !px-3 !text-xs">Mark as read</x-secondary-button>
+                            <x-secondary-button submit class="!py-1 !px-3 !text-xs">Mark as read</x-secondary-button>
                         </form>
                     @endif
                 </div>
