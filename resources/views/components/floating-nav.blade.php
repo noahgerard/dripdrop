@@ -1,6 +1,6 @@
-<div class="fixed flex justify-center w-full left-0 bottom-[5%] z-50">
+<div class="fixed flex justify-center w-full left-0 bottom-[5%] z-50 pointer-events-none">
     <div
-        class="flex gap-8 p-4 px-10 rounded-full shadow-2xl bg-gradient-to-r from-white/60 via-slate-100/60 to-white/60 backdrop-blur-xl border-2 border-white/20">
+        class="flex gap-8 p-4 px-10 rounded-full shadow-2xl bg-gradient-to-r from-white/60 via-slate-100/60 to-white/60 backdrop-blur-xl border-2 border-white/20 pointer-events-auto">
         <x-nav-icon :href="route('dashboard')" :active="request()->routeIs('dashboard')">
             <x-lucide-house class="w-7 h-7" />
         </x-nav-icon>
