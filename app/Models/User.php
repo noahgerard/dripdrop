@@ -124,6 +124,32 @@ class User extends Authenticatable
         ];
     }
 
+    public function chart_data()
+    {
+        // Chart data (last 30 days)
+        $dates = collect(range(0, 29))->map(function ($i) {
+            return now()->copy()->subDays(29 - $i)->toDateString();
+        });
+
+        // Fetch coffees consumed in last 30 days
+        $coffeeCounts = $this->coffees()
+            ->where('consumed_at', '>=', now()->copy()->subDays(29))
+            ->get()
+            ->groupBy(function ($coffee) {
+                return $coffee->consumed_at->toDateString();
+            });
+
+        // Map dates to number of coffees that day
+        $coffee_chart_data = $dates->map(function ($date) use ($coffeeCounts) {
+            return [
+                'date' => $date,
+                'count' => isset($coffeeCounts[$date]) ? $coffeeCounts[$date]->count() : 0,
+            ];
+        });
+
+        return $coffee_chart_data;
+    }
+
     public static function leaderboard()
     {
         $startOfWeek = now()->copy()->startOfWeek();

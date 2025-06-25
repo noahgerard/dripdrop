@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coffee;
 use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +20,12 @@ class LeaderboardController extends Controller
     {
         $user_leaderboard = User::leaderboard();
         $dep_leaderboard = Department::leaderboard();
+        $coffee_chart_data = Coffee::chart_data();
 
-        return view('leaderboard', ['user_leaderboard' => $user_leaderboard, 'dep_leaderboard' => $dep_leaderboard]);
+        return view('leaderboard', [
+            'user_leaderboard' => $user_leaderboard,
+            'dep_leaderboard' => $dep_leaderboard,
+            'coffee_chart_data' => $coffee_chart_data
+        ]);
     }
 }

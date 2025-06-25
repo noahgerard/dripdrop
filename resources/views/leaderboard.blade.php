@@ -9,11 +9,15 @@
                 <h2 class="text-2xl font-bold">User Leaderboard ({{ $user_leaderboard->total() }})</h2>
                 <h2 class="text-md text-gray-400">This week</h2>
             </div>
-            
 
             <x-user-list :users="$user_leaderboard" show_department />
             <div class="mt-4">
                 {{ $user_leaderboard->appends(['dep_lb' => $dep_leaderboard->currentPage()])->links() }}
+            </div>
+
+            <div class="mt-8">
+                <h2 class="text-2xl font-bold">Coffee Chart</h2>
+                <x-coffee-chart :chart_data="$coffee_chart_data" id="leaderboardCoffeeChart" />
             </div>
 
             <div class="flex flex-row justify-between items-end mt-8">

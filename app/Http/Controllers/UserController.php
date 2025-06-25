@@ -112,27 +112,7 @@ class UserController extends Controller
 
         $user_stats = $user->stats();
         $dep_stats = $user->department ? $user->department->stats() : [];
-
-        // Chart data (last 30 days)
-        $dates = collect(range(0, 29))->map(function ($i) {
-            return now()->copy()->subDays(29 - $i)->toDateString();
-        });
-
-        // Fetch coffees consumed in last 30 days
-        $coffeeCounts = $user->coffees()
-            ->where('consumed_at', '>=', now()->copy()->subDays(29))
-            ->get()
-            ->groupBy(function ($coffee) {
-                return $coffee->consumed_at->toDateString();
-            });
-
-        // Map dates to number of coffees that day
-        $coffee_chart_data = $dates->map(function ($date) use ($coffeeCounts) {
-            return [
-                'date' => $date,
-                'count' => isset($coffeeCounts[$date]) ? $coffeeCounts[$date]->count() : 0,
-            ];
-        });
+        $coffee_chart_data = $user->chart_data();
 
         return view('user', [
             'user' => $user,
