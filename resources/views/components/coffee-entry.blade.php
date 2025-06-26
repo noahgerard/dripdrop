@@ -28,6 +28,10 @@
                     x-transition:leave-end="opacity-0 transform scale-95"
                     class="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-10 py-2 flex flex-col"
                     style="display: none;">
+                    <a href="{{ route('coffee.editForm', $coffee->id) }}"
+                        class="w-full text-left px-4 py-2 text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                        <x-lucide-pencil class="w-4 h-4" /> Edit
+                    </a>
                     <form method="POST" action="{{ route('coffee.delete') }}">
                         @csrf
                         @method('delete')

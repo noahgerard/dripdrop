@@ -38,7 +38,7 @@ class CoffeeController extends Controller
     public function create(Request $request): RedirectResponse
     {
         $data['user_id'] = $request->user()->id;
-        $data['consumed_at'] = now();
+        //$data['consumed_at'] = now();
 
         $types = config('app.coffee.types');
 
@@ -47,11 +47,13 @@ class CoffeeController extends Controller
             'desc' => 'required|string|max:1000',
             'coffee_type' => 'required|string|in:' . implode(',', array_keys($types)),
             'coffee_image' => 'nullable|image|max:600',
+            'consumed_at' => 'required|date',
         ]);
 
         $data['title'] = $validated['title'];
         $data['desc'] = $validated['desc'];
         $data['type'] = $validated['coffee_type'];
+        $data['consumed_at'] = $validated['consumed_at'];
 
         if ($request->hasFile('coffee_image')) {
             $image = $request->file('coffee_image');
@@ -119,5 +121,44 @@ class CoffeeController extends Controller
         } else {
             return Redirect::route('dashboard')->with('status', 'not-found');
         }
+    }
+
+    /**
+     * Show the edit form for a coffee post
+     */
+    public function editForm(Request $request, $id): View|RedirectResponse
+    {
+        $coffee = Coffee::where('id', $id)->where('user_id', $request->user()->id)->first();
+        if (!$coffee) {
+            return Redirect::route('dashboard')->with('status', 'not-found');
+        }
+        return view('edit-coffee', ['coffee' => $coffee]);
+    }
+
+    /**
+     * Update a coffee post
+     */
+    public function edit(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'id' => 'required|integer|exists:coffees,id',
+            'title' => 'required|string|max:255',
+            'desc' => 'required|string|max:1000',
+            'coffee_type' => 'required|string',
+            'consumed_at' => 'required|date',
+        ]);
+
+        $coffee = Coffee::where('id', $validated['id'])->where('user_id', $request->user()->id)->first();
+        if (!$coffee) {
+            return Redirect::route('dashboard')->with('status', 'not-found');
+        }
+
+        $coffee->title = $validated['title'];
+        $coffee->desc = $validated['desc'];
+        $coffee->type = $validated['coffee_type'];
+        $coffee->consumed_at = $validated['consumed_at'];
+        $coffee->save();
+
+        return Redirect::route("coffee.view", ['id' => $coffee->id])->with('status', 'coffee-updated');
     }
 }
