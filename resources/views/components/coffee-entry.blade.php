@@ -37,7 +37,8 @@
                         @method('delete')
                         <input type="hidden" name="id" value="{{ $coffee->id }}">
                         <button type="submit"
-                            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50">Delete</button>
+                            class="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50">
+                            <x-lucide-trash class="w-4 h-4" /> Delete</button>
                     </form>
                 </div>
             </div>
