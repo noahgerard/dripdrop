@@ -1,61 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DripDrop ☕️
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern coffee tracking and social app built as an intern side project at FOCUS!
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Overview
+DripDrop is a Laravel-based web application for logging, sharing, and visualizing coffee consumption within a team or organization. Users can log their coffee, comment, view leaderboards, and see department stats. The app is designed for a fun, social, and data-driven coffee culture.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
+- User authentication (SSO and email)
+- Log coffee entries with time, type, and optional image
+- Comment on coffee entries
+- Department and user leaderboards
+- Department stats and charts
+- Notifications for comments and activity
+- Responsive, modern UI with Tailwind CSS and Alpine.js
+- Image upload and compression
+- Pagination and charts for data visualization
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech Stack
+- **Backend:** Laravel (PHP)
+- **Frontend:** Blade, Alpine.js, Tailwind CSS
+- **Build Tools:** Vite
+- **Database:** SQLite (dev), Eloquent ORM
+- **Testing:** PestPHP
+- **Other:** Chart.js, browser-image-compression
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Setup
 
-## Laravel Sponsors
+1. **Clone the repo:**
+   ```sh
+   git clone https://github.com/noahgerard/dripdrop.git
+   cd dripdrop
+   ```
+2. **Install PHP dependencies:**
+   ```sh
+   composer install
+   ```
+3. **Install JS dependencies:**
+   ```sh
+   npm install
+   ```
+4. **Copy and edit your environment file:**
+   ```sh
+   cp .env.example .env
+   # Edit .env as needed
+   ```
+5. **Generate app key:**
+   ```sh
+   php artisan key:generate
+   ```
+6. **Run migrations and seeders:**
+   ```sh
+   php artisan migrate --seed
+   ```
+7. **Start the dev server:**
+   ```sh
+   npm run dev
+   # In another terminal:
+   php artisan serve
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Usage
+- Register or log in
+- Log your coffee with time, type, and optional image
+- View your department and user stats
+- Comment on others' coffee entries
+- Check the leaderboard and department charts
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Screenshots
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Dashboard | Feed | Log |
+|---|---|---|
+| ![Dashboard](/media/dash.png) | ![Feed](/media/feed.png) | ![Log](/media/log.png) |
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Folder Structure
+- `app/` - Laravel app code (Controllers, Models, etc.)
+- `resources/views/` - Blade templates and UI components
+- `resources/js/` - Frontend JS (Alpine.js, app logic)
+- `public/` - Public assets and entry point
+- `media/` - App screenshots and images
+- `routes/` - Route definitions
+- `database/` - Migrations, seeders, SQLite DB
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Credits
+- Built by Noah Gerard as an intern project at FOCUS!
+- Thanks to the Laravel, Alpine.js, and Tailwind CSS communities
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+[MIT license](https://opensource.org/licenses/MIT).
