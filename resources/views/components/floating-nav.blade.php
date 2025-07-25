@@ -9,12 +9,12 @@
             <x-lucide-trophy class="w-7 h-7" />
         </x-nav-icon>
 
-        <x-nav-icon :href="route('coffee.form')" :active="request()->routeIs('coffee')">
+        <x-nav-icon :href="route('coffee.form')" :active="request()->routeIs('coffee.form')">
             <x-lucide-coffee class="w-7 h-7" />
         </x-nav-icon>
 
         @auth
-            <x-nav-icon :href="route('feed.view')" :active="request()->routeIs('feed')">
+            <x-nav-icon :href="route('feed.view')" :active="request()->routeIs('feed.view')">
                 <x-lucide-newspaper class="w-7 h-7" />
             </x-nav-icon>
         @endauth
